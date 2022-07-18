@@ -13,6 +13,12 @@ private:
   int last_num;
   int err;
 public:
+  int get_error(){
+    return err;
+  }
+  int get_result(){
+    return last_num;
+  }
   bool arit(std::vector<item> &a, item &c){
     //std::cout << "arith --------" << std::endl
     for(int i=0; i<a.size(); i++){
@@ -168,12 +174,34 @@ public:
     return false;
   }
   
+  bool geometric(std::vector<int> &inp, int nth){
+    err = 0;
+    std::vector<item> arr(inp.size());
+    for(int i=0; i<inp.size(); i++){
+      arr.at(i).num = inp.at(i);
+    }
+    item c;
+    int r, a_1 = inp.at(0);
+    bool is_geom = geom(arr, c);
+    r = c.num;
+    if(is_geom){
+      int t = 1;
+      for(int i=1; i<=nth-1; i++){
+        t *= r;
+      }
+      last_num = a_1 * t;
+      return true;
+    }
+    return false;
+  }
+
 };
 
 int main(int argc, char *argv[]) {
   seq_solver m;
   std::vector<int> a = {1,3,5,7,9};
-  std::cout <<  m.arithmetic(a, 10);
+  std::cout <<  m.arithmetic(a, 10) << std::endl;
+  std::cout << m.get_result() << std::endl;
   std::cout << "==================" << std::endl;
   std::vector<int> b = {1,4,9,16,25};
 }
