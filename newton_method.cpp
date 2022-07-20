@@ -14,7 +14,7 @@ struct polynomial{
     double q=hd;
     double temp=0;
     for(int i=0; i<nc.size(); i++){
-      int t=1;
+      double t=1;
       for(int i=0; i<q; i++){
         t *= e;
       }
@@ -39,15 +39,25 @@ struct polynomial{
 double nm(polynomial p, double x0){
   double x = x0, xnew;
   polynomial p_ = p.derivative();
-  double eps = 0.00001;
-  for(int i=0; i<100; i++){
+  double eps = 0.0000001;
+  double tol = 0.0000001;
+  double t;
+  int i;
+  for(i=0; i<1000; i++){
     xnew = x - p.eval(x) / p_.eval(x);
-    double t = xnew;
+    //std::cout << p.eval(x) << " " << p_.eval(x) << std::endl;
+    t = xnew;
     if(std::abs(p_.eval(x)) < eps){
       break;
     }
+    if(std::abs(xnew - x) <= tol){
+      return t;
+    }
     x = t;
-    //std::cout << xnew << std::endl;
+    //std::cout << xnew << " " << x << " "<< std::endl;
+  }
+  if(i==1000){
+    std::cout << "Did not converge" << std::endl;
   }
   return x;
 }
@@ -55,7 +65,7 @@ double nm(polynomial p, double x0){
 int main(){
   std::vector<double> v={1,4,4};
   polynomial a(v);
-  std::cout << a.eval(-2) << std::endl;
+  std::cout << a.eval(-1.5) << std::endl;
   std::cout << a.derivative().eval(2) << std::endl;
   std::cout << nm(a, 2) << std::endl;
   return 0;
