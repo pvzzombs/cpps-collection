@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <cmath>
 
 struct polynomial{
   std::vector<double> nc;
@@ -38,15 +39,15 @@ struct polynomial{
 double nm(polynomial p, double x0){
   double x = x0, xnew;
   polynomial p_ = p.derivative();
-  double eps = 0.00005;
+  double eps = 0.00001;
   for(int i=0; i<100; i++){
     xnew = x - p.eval(x) / p_.eval(x);
     double t = xnew;
-    if(p_.eval(x) < eps){
+    if(std::abs(p_.eval(x)) < eps){
       break;
     }
     x = t;
-    std::cout << xnew << std::endl;
+    //std::cout << xnew << std::endl;
   }
   return x;
 }
