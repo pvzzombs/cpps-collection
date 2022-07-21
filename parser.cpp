@@ -25,6 +25,10 @@ bool is_space(char c){
   return c == ' ' || c == '\t';
 }
 
+bool is_eol(char c){
+  return c == '\n';
+}
+
 class parser{
 public:
   std::vector<p_token> parse(std::string inp){
@@ -34,21 +38,18 @@ public:
     int line = 1;
 
     for(int i=0; i<inp.size(); i++){
+      t.line = line;
+      t.col = i+1;
+      t.value = inp.at(i);
       if(is_alpha(inp.at(i))){
-        t.line = line;
-        t.col = i+1;
-        t.value = inp.at(i);
         t.type = LETTER;
-        arr.push_back(t);
       }else if(is_space(inp.at(i))){
-        t.line = line;
-        t.col = i+1;
-        t.value = inp.at(i);
         t.type = SPACE;
-        arr.push_back(t);
       }else if(is_eol(inp.at(i))){
-
+        t.type = EOL;
+        line++;
       }
+      arr.push_back(t);
     }
   }
 }
