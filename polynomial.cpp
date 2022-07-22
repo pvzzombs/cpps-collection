@@ -128,13 +128,16 @@ public:
       double t = nc.at(i);
       //std::cout << "==== " << t << std::endl;
       char sign = '+';
-      if(i > 0){
-        if(t < 0){
-          t *= -1;
-          sign = '-';
-        }
-        std::cout << " " << sign << " ";
+      if(t < 0){
+        t *= -1;
+        sign = '-';
       }
+      if(i > 0){
+        std::cout << " " << sign << " ";
+      }else{
+        std::cout << sign;
+      }
+      //std::cout << "****" << t << std::endl;
       if(t != 0){
         if(t != 1){
           std::cout << t;
@@ -156,13 +159,13 @@ public:
 };
 
 int main(){
-  double a[] = {1,4,4};
-  int b[] = {2,1,0};
+  //double a[] = {1,4,4};
+  //int b[] = {2,1,0};
   //polynomial c(a, b, 3);
   //std::cout << c.eval(1) << std::endl;
   //c.print();
   //c.derivative().print();
-  polynomial d("-x2 - 4x - 4");
+  polynomial d("-x2 - 1x - 1");
   d.print();
   return 0;
 }
