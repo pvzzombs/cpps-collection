@@ -14,25 +14,33 @@ class polynomial{
   bool is_x(char c){
     return c == 'x' || c == 'X';
   }
+  bool is_pow(char c){
+    return c == '^';
+  }
 public:
   polynomial(){}
   polynomial(std::string str){
     int sign = 1;
     std::string tmpnum;
     bool is_epn = false;
+    bool skip = false;
 
     std::vector<double> a;
     std::vector<int> b;
 
     for(int i=0; i<str.size(); i++){
       char c = str.at(i);
+      if(skip){
+        skip = false;
+        continue;
+      }
       if(is_sign(c)){
         if(is_epn){
           if(tmpnum.size()){
             b.push_back(std::stoi(tmpnum) * sign);
             tmpnum = "";
           }else{
-            b.push_back(1);
+            b.push_back(1 * sign);
           }
           is_epn = false;
         }
@@ -55,13 +63,27 @@ public:
         sign = 1;
         is_epn = true;
       }
+      if(is_pow(c)){
+        char d = '\0';
+        if(i+1 < str.size()){
+          d = str.at(i+1);
+        }
+        if(is_sign(d) && d == '-'){
+          sign = -1;
+          skip = true;
+        }else{
+          sign = 1;
+          skip = false;
+        }
+        is_epn = true;
+      }
     }
     if(tmpnum.size()){
       if(!is_epn){
         a.push_back(std::stod(tmpnum) * sign);
         b.push_back(0);
       }else{
-        b.push_back(std::stoi(tmpnum));
+        b.push_back(std::stoi(tmpnum) * sign);
       }
       is_epn = false;
       sign = 1;
@@ -135,7 +157,9 @@ public:
       if(i > 0){
         std::cout << " " << sign << " ";
       }else{
-        std::cout << sign;
+        if(sign == '-'){
+          std::cout << sign;
+        }
       }
       //std::cout << "****" << t << std::endl;
       if(t != 0){
@@ -165,7 +189,7 @@ int main(){
   //std::cout << c.eval(1) << std::endl;
   //c.print();
   //c.derivative().print();
-  polynomial d("-x2 - 1x - 1");
+  polynomial d("x^2 + 4x - x^-2");
   d.print();
   return 0;
 }
