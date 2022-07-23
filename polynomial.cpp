@@ -43,6 +43,12 @@ public:
             b.push_back(1 * sign);
           }
           is_epn = false;
+        }else{
+          if(tmpnum.size()){
+            a.push_back(std::stod(tmpnum) * sign);
+            tmpnum = "";
+            b.push_back(0);
+          }
         }
         if(c == '-'){
           sign = -1;
@@ -189,7 +195,7 @@ int main(){
   //std::cout << c.eval(1) << std::endl;
   //c.print();
   //c.derivative().print();
-  polynomial d("x^2 + 4x - x^-2");
+  polynomial d("x^2 + 4x - 2 + x^-2");
   d.print();
   return 0;
 }
