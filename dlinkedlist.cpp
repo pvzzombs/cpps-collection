@@ -16,7 +16,7 @@ class double_ll{
   bool destroyed;
 public:
   void init(int num){
-    if(head == nullptr){
+    if(head == nullptr && !destroyed){
       head = new dll;
       head->x = num;
       ++size_;
@@ -24,9 +24,38 @@ public:
   }
   double_ll(): head(nullptr), size_(0), destroyed(false){
   }
+  double_ll(const double_ll &rhs): head(nullptr), size_(0), destroyed(false){
+    if(rhs.size_ > 0 && !rhs.destroyed){
+      dll * current = nullptr;
+      dll * rhs_ = rhs.head;
+      head = new dll;
+      head->x = rhs.head->x;
+      current = head;
+      ++size_;
+      while(true){
+        if(rhs_->next != nullptr){
+          current->next = new dll;
+          current->next->x = rhs_->next->x;
+          current = current->next;
+          rhs_ = rhs_->next;
+          ++size_;
+        }else{
+          break;
+        }
+      }
+    }
+  }
+  double_ll& operator=(const double_ll &rhs){
+    double_ll tmp(rhs);
+    std::swap(head, tmp.head);
+    std::swap(size_, tmp.size_);
+    std::swap(destroyed, tmp.destroyed);
+
+    return *this;
+  }
   void push_back(int num){
     dll * current = head;
-    if(current != nullptr){
+    if(current != nullptr && !destroyed){
       while(current->next != nullptr){
         current = current->next;
       }
@@ -41,7 +70,7 @@ public:
   }
   void pop_back(){
     dll * current = head;
-    if(current != nullptr){
+    if(current != nullptr && !destroyed){
       while(current->next != nullptr){
         current = current->next;
       }
@@ -57,7 +86,7 @@ public:
   void insert(int index, int num){
     dll * current = head;
     int i=0;
-    if(current != nullptr){
+    if(current != nullptr && !destroyed){
       while(true){
         if(i == index){
           break;
@@ -97,7 +126,7 @@ public:
   void remove(int index){
     dll * current = head;
     int i=0;
-    if(current != nullptr){
+    if(current != nullptr && !destroyed){
       while(true){
         if(i == index){
           break;
@@ -131,7 +160,7 @@ public:
   }
   void print(){
     dll * current = head;
-    if(current != nullptr){
+    if(current != nullptr && !destroyed){
       while(true){
         std::cout << "[" << current->x << "]";
         if(current->next != nullptr){
@@ -146,7 +175,7 @@ public:
   }
   void rprint(){
     dll * current = head;
-    if(current != nullptr){
+    if(current != nullptr && !destroyed){
       while(current->next != nullptr){
         current = current->next;
       }
@@ -165,7 +194,7 @@ public:
   dll * at(int index){
     dll * current = head;
     int i=0;
-    if(current != nullptr){
+    if(current != nullptr && !destroyed){
       while(true){
         if(i == index){
           break;
@@ -186,27 +215,31 @@ public:
     return size_;
   }
   void sort(){
-    for(int i=0; i<size_; i++){
-      for(int j=i+1; j<size_; j++){
-        //std::cout << i << " " << j << std::endl;
-        if(at(j)->x < at(i)->x){
+    if(head != nullptr && !destroyed){
+      for(int i=0; i<size_; i++){
+        for(int j=i+1; j<size_; j++){
           //std::cout << i << " " << j << std::endl;
-          int n = at(j)->x;
-          remove(j);
-          insert(i, n);
-          //remove(j+1);
+          if(at(j)->x < at(i)->x){
+            //std::cout << i << " " << j << std::endl;
+            int n = at(j)->x;
+            remove(j);
+            insert(i, n);
+            //remove(j+1);
+          }
         }
       }
     }
   }
   void rsort(){
-    for(int i=0; i<size_; i++){
-      for(int j=i+1; j<size_; j++){
-        if(at(j)->x > at(i)->x){
-          int n = at(j)->x;
-          remove(j);
-          insert(i, n);
-          //remove(j+1);
+    if(head != nullptr && !destroyed){
+      for(int i=0; i<size_; i++){
+        for(int j=i+1; j<size_; j++){
+          if(at(j)->x > at(i)->x){
+            int n = at(j)->x;
+            remove(j);
+            insert(i, n);
+            //remove(j+1);
+          }
         }
       }
     }
