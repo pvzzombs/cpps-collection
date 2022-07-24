@@ -13,12 +13,16 @@ struct dll{
 class double_ll{
   dll * head;
   int size_;
+  bool destroyed;
 public:
   void init(int num){
-    size_ = 0;
-    head = new dll;
-    head->x = num;
-    ++size_;
+    if(head == nullptr){
+      head = new dll;
+      head->x = num;
+      ++size_;
+    }
+  }
+  double_ll(): head(nullptr), size_(0), destroyed(false){
   }
   void push_back(int num){
     dll * current = head;
@@ -209,18 +213,25 @@ public:
   }
   void destroy(){
     dll * current = head;
-    while(current != nullptr){
-      dll * temp = current->next;
-      delete current;
-      current = temp;
-      --size_;
+    if(!destroyed){
+      while(current != nullptr){
+        dll * temp = current->next;
+        delete current;
+        current = temp;
+        --size_;
+      }
+      destroyed = true;
+      //std::cout << "Destroyed" << std::endl;
     }
+  }
+  ~double_ll(){
+    destroy();
   }
 };
 
 int main(){
   double_ll a;
-  a.init(1);
+  a.push_back(1);
   a.push_back(4);
   a.push_back(3);
   a.push_back(2);
@@ -230,7 +241,6 @@ int main(){
   //a.rprint();
   a.rsort();
   a.print();
-  a.destroy();
   std::cout << a.size() << std::endl;
   return 0;
 }
