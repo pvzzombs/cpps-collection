@@ -140,7 +140,12 @@ public:
       }
       if(head == current){
         dll * y = current->next;
-        y->prev = nullptr;
+        if(y != nullptr){
+          y->prev = nullptr;
+          head = y;
+        }else{
+          head = nullptr;
+        }
         delete current;
       }else if(current->next == nullptr){
         dll * w = current->prev;
@@ -265,15 +270,20 @@ public:
 int main(){
   double_ll a;
   a.push_back(1);
-  a.push_back(4);
-  a.push_back(3);
-  a.push_back(2);
+  //a.push_back(4);
+  //a.push_back(3);
+  //a.push_back(2);
   //a.insert(0, 0);
   //a.remove(3);
   a.print();
+  a.remove(0);
+  a.remove(0);
   //a.rprint();
-  a.rsort();
-  a.print();
-  std::cout << a.size() << std::endl;
+  //a.rsort();
+  //a.print();
+  //double_ll b;
+  //b = a;
+  //b.print();
+  //std::cout << a.size() << std::endl;
   return 0;
 }
