@@ -220,8 +220,29 @@ public:
     }
     return current;
   }
+  dll_node * front(){
+    dll_node * current = head;
+    int i=0;
+    if(current != nullptr && !destroyed){
+      return current;
+    }
+    return nullptr;
+  }
+  dll_node * back(){
+    dll_node * current = head;
+    if(current != nullptr && !destroyed){
+      while(current->next != nullptr){
+        current = current->next;
+      }
+      return current;
+    }
+    return nullptr;
+  }
   int size(){
     return size_;
+  }
+  bool empty(){
+    return size_ == 0;
   }
   void sort(){
     if(head != nullptr && !destroyed){
