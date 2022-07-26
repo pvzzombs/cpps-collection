@@ -106,7 +106,7 @@ public:
         current->prev = a;
 
         head = a;
-      }else{
+      }else if(index < size_){
         dll_node * a = current->prev;
         dll_node * b = new dll_node;
         b->x = num;
@@ -116,7 +116,11 @@ public:
 
         b->next = current;
         b->prev = a;
-      }  
+      }else{
+        current->next = new dll_node;
+        current->next->x = num;
+        current->next->prev = current;
+      }
     }else{
       head = new dll_node;
       head->x = num;
@@ -274,14 +278,14 @@ int main(){
   a.print();
   //a.insert(4, 10);
   //a.remove(3);
-  a.print();
-  a.remove(0);
-  a.remove(0);
-  a.remove(0);
-  a.remove(0);
-  a.insert(0,12);
-  a.insert(0,3);
-  a.insert(10,4);
+  //a.print();
+  //a.remove(0);
+  //a.remove(0);
+  //a.remove(0);
+  //a.remove(0);
+  //a.insert(0,12);
+  //a.insert(0,3);
+  a.insert(4,7);
   a.print();
   a.rsort();
   a.print();
