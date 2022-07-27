@@ -15,11 +15,13 @@ class dll{
   int size_;
   bool destroyed;
 public:
-  void init(int num){
+  inline void init(int num, bool b=false){
     if(head == nullptr && !destroyed){
       head = new dll_node;
       head->x = num;
-      ++size_;
+      if(b){
+        ++size_;
+      }
     }
   }
   dll(): head(nullptr), size_(0), destroyed(false){
@@ -50,7 +52,6 @@ public:
     std::swap(head, tmp.head);
     std::swap(size_, tmp.size_);
     std::swap(destroyed, tmp.destroyed);
-
     return *this;
   }
   void push_back(int num){
@@ -63,8 +64,7 @@ public:
       current->next->x = num;
       current->next->prev = current;
     }else{
-      head = new dll_node;
-      head->x = num;
+      init(num);
     }
     ++size_;
   }
@@ -92,8 +92,7 @@ public:
       current->prev = a;
       head = a;
     }else{
-      head = new dll_node;
-      head->x = num;
+      init(num);
     }
     ++size_;
   }
@@ -150,8 +149,7 @@ public:
         current->next->prev = current;
       }
     }else{
-      head = new dll_node;
-      head->x = num;
+      init(num);
     }
     ++size_;
   }
@@ -195,6 +193,9 @@ public:
       std::cerr << "Nothing to remove" << std::endl;
     }
   }
+  inline void erase(int index){
+    remove(index);
+  }
   void print(){
     dll_node * current = head;
     if(current != nullptr && !destroyed){
@@ -228,7 +229,7 @@ public:
     std::cout << std::endl;
     }
   }
-  dll_node * at(int index){
+  inline dll_node * at(int index){
     dll_node * current = head;
     int i=0;
     if(current != nullptr && !destroyed){
@@ -248,14 +249,14 @@ public:
     }
     return current;
   }
-  dll_node * front(){
+  inline dll_node * front(){
     dll_node * current = head;
     if(current != nullptr && !destroyed){
       return current;
     }
     return nullptr;
   }
-  dll_node * back(){
+  inline dll_node * back(){
     dll_node * current = head;
     if(current != nullptr && !destroyed){
       while(current->next != nullptr){
@@ -265,10 +266,10 @@ public:
     }
     return nullptr;
   }
-  int size(){
+  inline int size(){
     return size_;
   }
-  bool empty(){
+  inline bool empty(){
     return size_ == 0;
   }
   void sort(){
@@ -299,6 +300,16 @@ public:
       }
     }
   }
+  void clear(){
+    dll_node * current = head;
+    while(current != nullptr){
+      dll_node * temp = current->next;
+      delete current;
+      current = temp;
+      --size_;
+    }
+    head = nullptr;
+  }
   void destroy(){
     dll_node * current = head;
     if(!destroyed){
@@ -308,6 +319,7 @@ public:
         current = temp;
         --size_;
       }
+      head = nullptr;
       destroyed = true;
       //std::cout << "Destroyed" << std::endl;
     }
@@ -319,11 +331,11 @@ public:
 
 int main(){
   dll a;
-  a.push_back(1);
-  a.push_back(4);
-  a.push_back(3);
-  a.push_back(2);
-  a.print();
+  //a.push_back(1);
+  //a.push_back(4);
+  //a.push_back(3);
+  //a.push_back(2);
+  //a.print();
   //a.insert(4, 10);
   //a.remove(3);
   //a.print();
@@ -333,18 +345,18 @@ int main(){
   //a.remove(0);
   //a.insert(0,12);
   //a.insert(0,3);
-  a.insert(4,7);
+  //a.insert(4,7);
   a.push_front(9);
   a.push_front(11);
   a.print();
   a.pop_front();
   a.pop_front();
   a.print();
-  a.rsort();
-  a.print();
+  //a.rsort();
+  //a.print();
   //dll b;
   //b = a;
   //b.print();
-  //std::cout << a.size() << std::endl;
+  std::cout << a.size() << std::endl;
   return 0;
 }
