@@ -91,7 +91,11 @@ public:
       a->next = current;
       current->prev = a;
       head = a;
+    }else{
+      head = new dll_node;
+      head->x = num;
     }
+    ++size_;
   }
   void pop_front(){
     dll_node * current = head;
@@ -104,6 +108,7 @@ public:
         head = nullptr;
       }
       delete current;
+      --size_;
     }
   }
   void insert(int index, int num){
@@ -329,6 +334,11 @@ int main(){
   //a.insert(0,12);
   //a.insert(0,3);
   a.insert(4,7);
+  a.push_front(9);
+  a.push_front(11);
+  a.print();
+  a.pop_front();
+  a.pop_front();
   a.print();
   a.rsort();
   a.print();
