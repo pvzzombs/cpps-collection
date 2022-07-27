@@ -83,6 +83,29 @@ public:
       --size_;
     }
   }
+  void push_front(int num){
+    dll_node * current = head;
+    if(current != nullptr && !destroyed){
+      dll_node * a = new dll_node;
+      a->x = num;
+      a->next = current;
+      current->prev = a;
+      head = a;
+    }
+  }
+  void pop_front(){
+    dll_node * current = head;
+    if(current != nullptr && !destroyed){
+      dll_node * y = current->next;
+      if(y != nullptr){
+        y->prev = nullptr;
+        head = y;
+      }else{
+        head = nullptr;
+      }
+      delete current;
+    }
+  }
   void insert(int index, int num){
     dll_node * current = head;
     int i=0;
@@ -222,7 +245,6 @@ public:
   }
   dll_node * front(){
     dll_node * current = head;
-    int i=0;
     if(current != nullptr && !destroyed){
       return current;
     }
