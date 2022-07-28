@@ -1,20 +1,57 @@
 #include <iostream>
 
-struct dll_node{
-  int x;
-  dll_node * prev;
-  dll_node * next;
-  dll_node(){
-    prev = nullptr;
-    next = nullptr;
-  }
-};
-
 class dll{
+  struct dll_node{
+    int x;
+    dll_node * prev;
+    dll_node * next;
+    dll_node(){
+      prev = nullptr;
+      next = nullptr;
+    }
+  };
   dll_node * head;
   int size_;
   bool destroyed;
 public:
+  class iterator{
+    friend class dll;
+    dll_node * t;
+    dll_node * prev;
+  public:
+    iterator(dll_node * t_=nullptr): t(t_), prev(nullptr){
+      if(t != nullptr){
+        if(t->prev != nullptr){
+          prev = t->prev;
+        }
+      }
+    }
+   iterator& operator++(){
+     if(t != nullptr){
+       prev = t;
+       t = t->next;
+     }
+     return *this;
+   }
+   iterator& operator--(){
+     if(prev != nullptr){
+       t = prev;
+       prev = t->prev;
+     }
+     return *this;
+   }
+   int& operator*(){
+     if(t != nullptr){
+       return t->x;
+     }
+   }
+   bool operator!=(const iterator& rhs){
+     return t != rhs.t;
+   }
+   bool operator==(const iterator& rhs){
+     return t == rhs.t;
+   }
+  };
   inline void init(int num, bool b=false){
     if(head == nullptr && !destroyed){
       head = new dll_node;
@@ -23,6 +60,26 @@ public:
         ++size_;
       }
     }
+  }
+  iterator begin(){
+    iterator tmp;
+    if(head != nullptr && !destroyed){
+      tmp.prev = nullptr;
+      tmp.t = head;
+    }
+    return tmp;
+  }
+  iterator end(){
+    iterator tmp;
+    dll_node * current = head;
+    if(current != nullptr && !destroyed){
+      while(current->next != nullptr){
+        current = current->next;
+      }
+      tmp.prev = current;
+      tmp.t = nullptr;
+    }
+    return tmp;
   }
   dll(): head(nullptr), size_(0), destroyed(false){
   }
@@ -331,32 +388,13 @@ public:
 
 int main(){
   dll a;
-  //a.push_back(1);
-  //a.push_back(4);
-  //a.push_back(3);
-  //a.push_back(2);
-  //a.print();
-  //a.insert(4, 10);
-  //a.remove(3);
-  //a.print();
-  //a.remove(0);
-  //a.remove(0);
-  //a.remove(0);
-  //a.remove(0);
-  //a.insert(0,12);
-  //a.insert(0,3);
-  //a.insert(4,7);
-  a.push_front(9);
-  a.push_front(11);
-  a.print();
-  a.pop_front();
-  a.pop_front();
-  a.print();
-  //a.rsort();
-  //a.print();
-  //dll b;
-  //b = a;
-  //b.print();
-  std::cout << a.size() << std::endl;
+  a.push_back(1);
+  a.push_back(4);
+  a.push_back(3);
+  a.push_back(2);
+  for(dll::iterator i=a.end(); i!=a.begin(); --i){
+    std::cout << "Data: " << *i << std::endl;
+  }
+  //std::cout << a.size() << std::endl;
   return 0;
 }
