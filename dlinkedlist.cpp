@@ -13,44 +13,53 @@ class dll{
   dll_node * head;
   int size_;
   bool destroyed;
-public:
+  public:
   class iterator{
     friend class dll;
-    dll_node * t;
-    dll_node * prev;
-  public:
-    iterator(dll_node * t_=nullptr): t(t_), prev(nullptr){
-      if(t != nullptr){
-        if(t->prev != nullptr){
-          prev = t->prev;
-        }
+    dll_node * c;
+    bool fh, ft;
+    void to_null(){
+      c = nullptr;
+    }
+    public:
+    iterator(): c(nullptr), fh(false),
+    ft(false){
+    }
+    iterator& operator++(){
+      if(c != nullptr){
+        c = c->next;
+      }
+      return *this;
+    }
+    iterator& operator--(){
+      if(c != nullptr){
+        c = c->prev;
+      }
+      return *this;
+    }
+    int& operator*(){
+      if(c != nullptr){
+        return c->x;
       }
     }
-   iterator& operator++(){
-     if(t != nullptr){
-       prev = t;
-       t = t->next;
-     }
-     return *this;
-   }
-   iterator& operator--(){
-     if(prev != nullptr){
-       t = prev;
-       prev = t->prev;
-     }
-     return *this;
-   }
-   int& operator*(){
-     if(t != nullptr){
-       return t->x;
-     }
-   }
-   bool operator!=(const iterator& rhs){
-     return t != rhs.t;
-   }
-   bool operator==(const iterator& rhs){
-     return t == rhs.t;
-   }
+    bool operator!=(iterator rhs){
+      if(fh && rhs.c != nullptr){
+        rhs.to_null();
+      }
+      if(ft && rhs.c != nullptr){
+        rhs.to_null();
+      }
+      return c != rhs.c;
+    }
+    bool operator==(iterator rhs){
+      if(fh && rhs.c != nullptr){
+        rhs.to_null();
+      }
+      if(ft && rhs.c != nullptr){
+        rhs.to_null();
+      }
+      return c == rhs.c;
+    }
   };
   inline void init(int num, bool b=false){
     if(head == nullptr && !destroyed){
@@ -64,8 +73,8 @@ public:
   iterator begin(){
     iterator tmp;
     if(head != nullptr && !destroyed){
-      tmp.prev = nullptr;
-      tmp.t = head;
+      tmp.c = head;
+      tmp.fh = true;
     }
     return tmp;
   }
@@ -76,8 +85,8 @@ public:
       while(current->next != nullptr){
         current = current->next;
       }
-      tmp.prev = current;
-      tmp.t = nullptr;
+      tmp.c = current;
+      tmp.ft = true;
     }
     return tmp;
   }
@@ -283,7 +292,7 @@ public:
           break;
         }
       }
-    std::cout << std::endl;
+      std::cout << std::endl;
     }
   }
   inline dll_node * at(int index){
@@ -392,7 +401,8 @@ int main(){
   a.push_back(4);
   a.push_back(3);
   a.push_back(2);
-  for(dll::iterator i=a.end(); i!=a.begin(); --i){
+  for(dll::iterator i=a.begin(); i!=a.end(); ++i){
+    std::cerr << "Hello " << std::endl;
     std::cout << "Data: " << *i << std::endl;
   }
   //std::cout << a.size() << std::endl;
