@@ -16,51 +16,52 @@ class dll{
   public:
   class iterator{
     friend class dll;
-    dll_node * c;
-    bool fh, ft;
-    void to_null(){
-      c = nullptr;
-    }
+    dll_node * ip;
+    bool is_begin, is_end;
     public:
-    iterator(): c(nullptr), fh(false),
-    ft(false){
+    iterator(): ip(nullptr), is_begin(false),
+    is_end(false){
     }
     iterator& operator++(){
-      if(c != nullptr){
-        c = c->next;
+      if(ip != nullptr){
+        ip = ip->next;
       }
       return *this;
     }
     iterator& operator--(){
-      if(c != nullptr){
-        c = c->prev;
+      if(ip != nullptr){
+        ip = ip->prev;
+      }
+      return *this;
+    }
+    iterator& operator+(size_t i){
+      for(size_t j=0; j<i; j++){
+        if(ip != nullptr){
+          ip = ip->next;
+        }
+      }
+      return *this;
+    }
+    iterator& operator-(size_t i){
+      for(size_t j=0; j<i; j++){
+        if(ip != nullptr){
+          ip = ip->prev;
+        }
       }
       return *this;
     }
     int& operator*(){
-      if(c != nullptr){
-        return c->x;
-      }
-      //must not be reached
-      return c->x;
+      return ip->x;
     }
-    bool operator!=(iterator rhs){
-      if(fh && rhs.c != nullptr){
-        rhs.to_null();
+    bool operator!=(const iterator& rhs){
+      if((is_begin && rhs.is_end) ||
+          (is_end && rhs.is_begin)){
+        return ip != nullptr;
       }
-      if(ft && rhs.c != nullptr){
-        rhs.to_null();
-      }
-      return c != rhs.c;
+      return ip != rhs.ip;
     }
-    bool operator==(iterator rhs){
-      if(fh && rhs.c != nullptr){
-        rhs.to_null();
-      }
-      if(ft && rhs.c != nullptr){
-        rhs.to_null();
-      }
-      return c == rhs.c;
+    bool operator==(const iterator& rhs){
+      return ip == rhs.ip;
     }
   };
   inline void init(int num, bool b=false){
@@ -75,8 +76,8 @@ class dll{
   iterator begin(){
     iterator tmp;
     if(head != nullptr && !destroyed){
-      tmp.c = head;
-      tmp.fh = true;
+      tmp.ip = head;
+      tmp.is_begin = true;
     }
     return tmp;
   }
@@ -87,8 +88,8 @@ class dll{
       while(current->next != nullptr){
         current = current->next;
       }
-      tmp.c = current;
-      tmp.ft = true;
+      tmp.ip = current;
+      tmp.is_end = true;
     }
     return tmp;
   }
@@ -405,7 +406,7 @@ int main(){
   a.push_back(4);
   a.push_back(3);
   a.push_back(2);
-  for(dll::iterator i=a.begin(); i!=a.end(); ++i){
+  for(dll::iterator i=a.end()-1; i!=a.begin(); --i){
     std::cerr << "Hello " << std::endl;
     std::cout << "Data: " << *i << std::endl;
   }
