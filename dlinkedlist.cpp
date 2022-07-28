@@ -34,21 +34,23 @@ class dll{
       }
       return *this;
     }
-    iterator& operator+(size_t i){
+    iterator operator+(size_t i){
+      iterator tmp = *this;
       for(size_t j=0; j<i; j++){
         if(ip != nullptr){
-          ip = ip->next;
+          tmp.ip = tmp.ip->next;
         }
       }
-      return *this;
+      return tmp;
     }
-    iterator& operator-(size_t i){
+    iterator operator-(size_t i){
+      iterator tmp = *this;
       for(size_t j=0; j<i; j++){
         if(ip != nullptr){
-          ip = ip->prev;
+          tmp.ip = tmp.ip->prev;
         }
       }
-      return *this;
+      return tmp;
     }
     int& operator*(){
       return ip->x;
@@ -222,6 +224,33 @@ class dll{
     }
     ++size_;
   }
+  void insert(iterator i, int num){
+    dll_node * current = i.ip;
+    if(current != nullptr && !destroyed){ 
+      if(head == current){
+        dll_node * a = new dll_node;
+        a->x = num;
+
+        a->next = current;
+        current->prev = a;
+
+        head = a;
+      }else{
+        dll_node * a = current->prev;
+        dll_node * b = new dll_node;
+        b->x = num;
+
+        a->next = b;
+        current->prev = b;
+
+        b->next = current;
+        b->prev = a;
+      }
+    }else{
+      init(num);
+    }
+    ++size_;
+  }
   void remove(int index){
     dll_node * current = head;
     int i=0;
@@ -262,8 +291,39 @@ class dll{
       std::cerr << "Nothing to remove" << std::endl;
     }
   }
+  void remove(iterator i){
+    dll_node * current = i.ip;
+    if(current != nullptr && !destroyed){
+      if(head == current){
+        dll_node * y = current->next;
+        if(y != nullptr){
+          y->prev = nullptr;
+          head = y;
+        }else{
+          head = nullptr;
+        }
+        delete current;
+      }else if(current->next == nullptr){
+        dll_node * w = current->prev;
+        w->next = nullptr;
+        delete current;
+      }else{
+        dll_node * w = current->prev;
+        dll_node * y = current->next;
+        w->next = y;
+        y->prev = w;
+        delete current;
+      }
+      --size_;
+    }else{
+      std::cerr << "Nothing to remove" << std::endl;
+    }
+  }
   inline void erase(int index){
     remove(index);
+  }
+  inline void erase(iterator i){
+    remove(i);
   }
   void print(){
     dll_node * current = head;
@@ -318,6 +378,10 @@ class dll{
     }
     return current->x;
   }
+  inline int& at(iterator i){
+    dll_node * current = i.ip;
+    return current->x;
+  }
   inline int& front(){
     dll_node * current = head;
     if(current != nullptr && !destroyed){
@@ -353,6 +417,31 @@ class dll{
             int n = at(j);
             remove(j);
             insert(i, n);
+          }
+        }
+      }
+    }
+  }
+  void sort(iterator a, iterator b){
+    if(head != nullptr && !destroyed){
+      if(a.is_end){
+        for(iterator i=a; i!=b; --i){
+          for(iterator j=a-1; j!=b; --j){
+            if(at(j) < at(i)){
+              int n = at(j);
+              remove(j);
+              insert(i, n);
+            }
+          }
+        }
+      }else{
+        for(iterator i=a; i!=b; ++i){
+          for(iterator j=a+1; j!=b; ++j){
+            if(at(j) < at(i)){
+              int n = at(j);
+              remove(j);
+              insert(i, n);
+            }
           }
         }
       }
@@ -405,11 +494,18 @@ int main(){
   a.push_back(1);
   a.push_back(4);
   a.push_back(3);
+  a.push_back(5);
   a.push_back(2);
-  for(dll::iterator i=a.end()-1; i!=a.begin(); --i){
+  //dll::iterator b = a.begin()+2;
+  //b = a.end();
+  /*for(dll::iterator i=a.end()-1; i!=a.begin(); --i){
     std::cerr << "Hello " << std::endl;
     std::cout << "Data: " << *i << std::endl;
-  }
+  }*/
+  //a.remove(b);
+  //a.sort(a.end(), a.begin());
+  a.sort();
+  a.print();
   //std::cout << a.size() << std::endl;
   return 0;
 }
