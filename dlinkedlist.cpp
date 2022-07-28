@@ -41,6 +41,8 @@ class dll{
       if(c != nullptr){
         return c->x;
       }
+      //must not be reached
+      return c->x;
     }
     bool operator!=(iterator rhs){
       if(fh && rhs.c != nullptr){
@@ -295,7 +297,7 @@ class dll{
       std::cout << std::endl;
     }
   }
-  inline dll_node * at(int index){
+  inline int& at(int index){
     dll_node * current = head;
     int i=0;
     if(current != nullptr && !destroyed){
@@ -313,24 +315,26 @@ class dll{
     }else{
       std::cerr << "Error, double linked list is uninitialized" << std::endl;
     }
-    return current;
+    return current->x;
   }
-  inline dll_node * front(){
+  inline int& front(){
     dll_node * current = head;
     if(current != nullptr && !destroyed){
-      return current;
+      return current->x;
     }
-    return nullptr;
+    //should not happen
+    return head->x;
   }
-  inline dll_node * back(){
+  inline int& back(){
     dll_node * current = head;
     if(current != nullptr && !destroyed){
       while(current->next != nullptr){
         current = current->next;
       }
-      return current;
+      return current->x;
     }
-    return nullptr;
+    //should not happen
+    return head->x;
   }
   inline int size(){
     return size_;
@@ -343,9 +347,9 @@ class dll{
       for(int i=0; i<size_; i++){
         for(int j=i+1; j<size_; j++){
           //std::cout << i << " " << j << std::endl;
-          if(at(j)->x < at(i)->x){
+          if(at(j) < at(i)){
             //std::cout << i << " " << j << std::endl;
-            int n = at(j)->x;
+            int n = at(j);
             remove(j);
             insert(i, n);
           }
@@ -357,8 +361,8 @@ class dll{
     if(head != nullptr && !destroyed){
       for(int i=0; i<size_; i++){
         for(int j=i+1; j<size_; j++){
-          if(at(j)->x > at(i)->x){
-            int n = at(j)->x;
+          if(at(j) > at(i)){
+            int n = at(j);
             remove(j);
             insert(i, n);
           }
