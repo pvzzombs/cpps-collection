@@ -107,7 +107,7 @@ class Dll{
   }
   Dll(): head(nullptr), size_(0), destroyed(false){
   }
-  Dll(const dll &rhs): head(nullptr), size_(0), destroyed(false){
+  Dll(const Dll &rhs): head(nullptr), size_(0), destroyed(false){
     if(rhs.size_ > 0 && !rhs.destroyed){
       DllNode * current = nullptr;
       DllNode * rhs_ = rhs.head;
@@ -128,7 +128,7 @@ class Dll{
       }
     }
   }
-  Dll& operator=(const dll &rhs){
+  Dll& operator=(const Dll &rhs){
     Dll tmp(rhs);
     std::swap(head, tmp.head);
     std::swap(size_, tmp.size_);
@@ -167,7 +167,7 @@ class Dll{
   void push_front(int num){
     DllNode * current = head;
     if(current != nullptr && !destroyed){
-      DllNode * a = new Dll_node;
+      DllNode * a = new DllNode;
       a->x = num;
       a->next = current;
       current->prev = a;
@@ -207,7 +207,7 @@ class Dll{
         }
       }
       if(head == current){
-        DllNode * a = new Dll_node;
+        DllNode * a = new DllNode;
         a->x = num;
 
         a->next = current;
@@ -216,7 +216,7 @@ class Dll{
         head = a;
       }else if(index < size_){
         DllNode * a = current->prev;
-        DllNode * b = new Dll_node;
+        DllNode * b = new DllNode;
         b->x = num;
 
         a->next = b;
@@ -238,7 +238,7 @@ class Dll{
     DllNode * current = i.ip;
     if(current != nullptr && !destroyed){ 
       if(head == current){
-        DllNode * a = new Dll_node;
+        DllNode * a = new DllNode;
         a->x = num;
 
         a->next = current;
@@ -247,7 +247,7 @@ class Dll{
         head = a;
       }else{
         DllNode * a = current->prev;
-        DllNode * b = new Dll_node;
+        DllNode * b = new DllNode;
         b->x = num;
 
         a->next = b;
@@ -426,7 +426,7 @@ class Dll{
     DllNode * current = head;
     if(current != nullptr && !destroyed){
       int s = size_;
-      DllNode * temp = new Dll_node;
+      DllNode * temp = new DllNode;
       temp->x = current->x;
       while(current->next != nullptr){
         current = current->next;
