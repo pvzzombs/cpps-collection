@@ -1,4 +1,5 @@
 #include <iostream>
+#include <exception>
 
 class dll{
   struct dll_node{
@@ -14,6 +15,11 @@ class dll{
   int size_;
   bool destroyed;
   public:
+  class dll_error: public std::exception{
+    virtual const char* what() const throw(){
+      return "Invalid memory location or value does not exist";
+    }
+  };
   class iterator{
     friend class dll;
     dll_node * ip;
@@ -53,7 +59,11 @@ class dll{
       return *this;
     }
     int& operator*(){
-      return ip->x;
+      if(ip != nullptr){
+        return ip->x;
+      }
+      dll_error err;
+      throw err;
     }
     bool operator!=(const iterator& rhs){
       if((is_begin && rhs.is_end) ||
@@ -374,21 +384,26 @@ class dll{
         }
       }
     }else{
-      std::cerr << "Error, double linked list is uninitialized" << std::endl;
+      dll_error err;
+      throw err;
     }
     return current->x;
   }
   inline int& at(iterator i){
     dll_node * current = i.ip;
-    return current->x;
+    if(current != nullptr && !destroyed){
+      return current->x;
+    }
+    dll_error err;
+    throw err;
   }
   inline int& front(){
     dll_node * current = head;
     if(current != nullptr && !destroyed){
       return current->x;
     }
-    //should not happen
-    return head->x;
+    dll_error err;
+    throw err;
   }
   inline int& back(){
     dll_node * current = head;
@@ -398,8 +413,8 @@ class dll{
       }
       return current->x;
     }
-    //should not happen
-    return head->x;
+    dll_error err;
+    throw err;
   }
   inline int size(){
     return size_;
@@ -429,9 +444,7 @@ class dll{
     if(head != nullptr && !destroyed){
       for(int i=0; i<size_; i++){
         for(int j=i+1; j<size_; j++){
-          //std::cout << i << " " << j << std::endl;
           if(at(j) < at(i)){
-            //std::cout << i << " " << j << std::endl;
             int n = at(j);
             at(j) = at(i);
             at(i) = n;
@@ -455,7 +468,6 @@ class dll{
       }else{
         for(iterator i=a; i!=b; ++i){
           for(iterator j=i+1; j!=b; ++j){
-            std::cout << *i << " " << *j << std::endl;
             if(at(j) < at(i)){
               int n = at(j);
               at(j) = at(i);
@@ -517,9 +529,6 @@ int main(){
   a.push_back(2);
   a.push_back(0);
   a.print();
-  //dll::iterator b = a.begin()+1;
-  //dll::iterator c = a.end()-1;
-  //b = a.end();
   /*for(dll::iterator i=a.end()-1; i!=a.begin(); --i){
     std::cerr << "Hello " << std::endl;
     std::cout << "Data: " << *i << std::endl;
@@ -529,9 +538,6 @@ int main(){
   //a.rsort();
   a.reverse();
   a.print();
-  a.rprint();
-  a.push_back(7);
-  a.print();
-  //std::cout << a.size() << std::endl;
+  std::cout << a.size() << std::endl;
   return 0;
 }
