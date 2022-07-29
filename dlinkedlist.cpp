@@ -20,12 +20,12 @@ class Dll{
       return "Invalid memory location or value does not exist";
     }
   };
-  class iterator{
+  class Iterator{
     friend class Dll;
     DllNode * ip;
     bool is_begin, is_end;
-    iterator operator+(size_t i){
-      iterator tmp = *this;
+    Iterator operator+(size_t i){
+      Iterator tmp = *this;
       for(size_t j=0; j<i; j++){
         if(ip != nullptr){
           tmp.ip = tmp.ip->next;
@@ -33,8 +33,8 @@ class Dll{
       }
       return tmp;
     }
-    iterator operator-(size_t i){
-      iterator tmp = *this;
+    Iterator operator-(size_t i){
+      Iterator tmp = *this;
       for(size_t j=0; j<i; j++){
         if(ip != nullptr){
           tmp.ip = tmp.ip->prev;
@@ -43,16 +43,16 @@ class Dll{
       return tmp;
     }
     public:
-    iterator(): ip(nullptr), is_begin(false),
+    Iterator(): ip(nullptr), is_begin(false),
     is_end(false){
     }
-    iterator& operator++(){
+    Iterator& operator++(){
       if(ip != nullptr){
         ip = ip->next;
       }
       return *this;
     }
-    iterator& operator--(){
+    Iterator& operator--(){
       if(ip != nullptr){
         ip = ip->prev;
       }
@@ -65,14 +65,14 @@ class Dll{
       DllError err;
       throw err;
     }
-    bool operator!=(const iterator& rhs){
+    bool operator!=(const Iterator& rhs){
       if((is_begin && rhs.is_end) ||
           (is_end && rhs.is_begin)){
         return ip != nullptr;
       }
       return ip != rhs.ip;
     }
-    bool operator==(const iterator& rhs){
+    bool operator==(const Iterator& rhs){
       return ip == rhs.ip;
     }
   };
@@ -85,16 +85,16 @@ class Dll{
       }
     }
   }
-  iterator begin(){
-    iterator tmp;
+  Iterator begin(){
+    Iterator tmp;
     if(head != nullptr && !destroyed){
       tmp.ip = head;
       tmp.is_begin = true;
     }
     return tmp;
   }
-  iterator end(){
-    iterator tmp;
+  Iterator end(){
+    Iterator tmp;
     DllNode * current = head;
     if(current != nullptr && !destroyed){
       while(current->next != nullptr){
@@ -234,7 +234,7 @@ class Dll{
     }
     ++size_;
   }
-  void insert(iterator i, int num){
+  void insert(Iterator i, int num){
     DllNode * current = i.ip;
     if(current != nullptr && !destroyed){ 
       if(head == current){
@@ -301,7 +301,7 @@ class Dll{
       std::cerr << "Nothing to remove" << std::endl;
     }
   }
-  void remove(iterator i){
+  void remove(Iterator i){
     DllNode * current = i.ip;
     if(current != nullptr && !destroyed){
       if(head == current){
@@ -332,7 +332,7 @@ class Dll{
   inline void erase(int index){
     remove(index);
   }
-  inline void erase(iterator i){
+  inline void erase(Iterator i){
     remove(i);
   }
   void print(){
@@ -389,7 +389,7 @@ class Dll{
     }
     return current->x;
   }
-  inline int& at(iterator i){
+  inline int& at(Iterator i){
     DllNode * current = i.ip;
     if(current != nullptr && !destroyed){
       return current->x;
@@ -453,11 +453,11 @@ class Dll{
       }
     }
   }
-  void sort(iterator a, iterator b){
+  void sort(Iterator a, Iterator b){
     if(head != nullptr && !destroyed){
       if(a.is_end){
-        for(iterator i=b; i!=a; ++i){
-          for(iterator j=i+1; j!=a; ++j){
+        for(Iterator i=b; i!=a; ++i){
+          for(Iterator j=i+1; j!=a; ++j){
             if(at(j) > at(i)){
               int n = at(j);
               at(j) = at(i);
@@ -466,8 +466,8 @@ class Dll{
           }
         }
       }else{
-        for(iterator i=a; i!=b; ++i){
-          for(iterator j=i+1; j!=b; ++j){
+        for(Iterator i=a; i!=b; ++i){
+          for(Iterator j=i+1; j!=b; ++j){
             if(at(j) < at(i)){
               int n = at(j);
               at(j) = at(i);
@@ -529,7 +529,7 @@ int main(){
   a.push_back(2);
   a.push_back(0);
   a.print();
-  /*for(Dll::iterator i=a.end()-1; i!=a.begin(); --i){
+  /*for(Dll::Iterator i=a.end()-1; i!=a.begin(); --i){
     std::cerr << "Hello " << std::endl;
     std::cout << "Data: " << *i << std::endl;
   }*/
