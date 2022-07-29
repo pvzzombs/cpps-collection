@@ -415,8 +415,8 @@ class dll{
           if(at(j) < at(i)){
             //std::cout << i << " " << j << std::endl;
             int n = at(j);
-            remove(j);
-            insert(i, n);
+            at(j) = at(i);
+            at(i) = n;
           }
         }
       }
@@ -425,22 +425,23 @@ class dll{
   void sort(iterator a, iterator b){
     if(head != nullptr && !destroyed){
       if(a.is_end){
-        for(iterator i=a; i!=b; --i){
-          for(iterator j=a-1; j!=b; --j){
-            if(at(j) < at(i)){
+        for(iterator i=b; i!=a; ++i){
+          for(iterator j=i+1; j!=a; ++j){
+            if(at(j) > at(i)){
               int n = at(j);
-              remove(j);
-              insert(i, n);
+              at(j) = at(i);
+              at(i) = n;
             }
           }
         }
       }else{
         for(iterator i=a; i!=b; ++i){
-          for(iterator j=a+1; j!=b; ++j){
+          for(iterator j=i+1; j!=b; ++j){
+            std::cout << *i << " " << *j << std::endl;
             if(at(j) < at(i)){
               int n = at(j);
-              remove(j);
-              insert(i, n);
+              at(j) = at(i);
+              at(i) = n;
             }
           }
         }
@@ -453,8 +454,8 @@ class dll{
         for(int j=i+1; j<size_; j++){
           if(at(j) > at(i)){
             int n = at(j);
-            remove(j);
-            insert(i, n);
+            at(j) = at(i);
+            at(i) = n;
           }
         }
       }
@@ -504,7 +505,7 @@ int main(){
   }*/
   //a.remove(b);
   //a.sort(a.end(), a.begin());
-  a.sort();
+  //a.rsort();
   a.print();
   //std::cout << a.size() << std::endl;
   return 0;
