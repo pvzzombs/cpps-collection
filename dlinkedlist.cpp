@@ -1,28 +1,28 @@
 #include <iostream>
 #include <exception>
 
-class dll{
-  struct dll_node{
+class Dll{
+  struct DllNode{
     int x;
-    dll_node * prev;
-    dll_node * next;
-    dll_node(){
+    DllNode * prev;
+    DllNode * next;
+    DllNode(){
       prev = nullptr;
       next = nullptr;
     }
   };
-  dll_node * head;
+  DllNode * head;
   int size_;
   bool destroyed;
   public:
-  class dll_error: public std::exception{
+  class DllError: public std::exception{
     virtual const char* what() const throw(){
       return "Invalid memory location or value does not exist";
     }
   };
   class iterator{
-    friend class dll;
-    dll_node * ip;
+    friend class Dll;
+    DllNode * ip;
     bool is_begin, is_end;
     iterator operator+(size_t i){
       iterator tmp = *this;
@@ -62,7 +62,7 @@ class dll{
       if(ip != nullptr){
         return ip->x;
       }
-      dll_error err;
+      DllError err;
       throw err;
     }
     bool operator!=(const iterator& rhs){
@@ -78,7 +78,7 @@ class dll{
   };
   inline void init(int num, bool b=false){
     if(head == nullptr && !destroyed){
-      head = new dll_node;
+      head = new DllNode;
       head->x = num;
       if(b){
         ++size_;
@@ -95,7 +95,7 @@ class dll{
   }
   iterator end(){
     iterator tmp;
-    dll_node * current = head;
+    DllNode * current = head;
     if(current != nullptr && !destroyed){
       while(current->next != nullptr){
         current = current->next;
@@ -105,19 +105,19 @@ class dll{
     }
     return tmp;
   }
-  dll(): head(nullptr), size_(0), destroyed(false){
+  Dll(): head(nullptr), size_(0), destroyed(false){
   }
-  dll(const dll &rhs): head(nullptr), size_(0), destroyed(false){
+  Dll(const dll &rhs): head(nullptr), size_(0), destroyed(false){
     if(rhs.size_ > 0 && !rhs.destroyed){
-      dll_node * current = nullptr;
-      dll_node * rhs_ = rhs.head;
-      head = new dll_node;
+      DllNode * current = nullptr;
+      DllNode * rhs_ = rhs.head;
+      head = new DllNode;
       head->x = rhs.head->x;
       current = head;
       ++size_;
       while(true){
         if(rhs_->next != nullptr){
-          current->next = new dll_node;
+          current->next = new DllNode;
           current->next->x = rhs_->next->x;
           current = current->next;
           rhs_ = rhs_->next;
@@ -128,20 +128,20 @@ class dll{
       }
     }
   }
-  dll& operator=(const dll &rhs){
-    dll tmp(rhs);
+  Dll& operator=(const dll &rhs){
+    Dll tmp(rhs);
     std::swap(head, tmp.head);
     std::swap(size_, tmp.size_);
     std::swap(destroyed, tmp.destroyed);
     return *this;
   }
   void push_back(int num){
-    dll_node * current = head;
+    DllNode * current = head;
     if(current != nullptr && !destroyed){
       while(current->next != nullptr){
         current = current->next;
       }
-      current->next = new dll_node;
+      current->next = new DllNode;
       current->next->x = num;
       current->next->prev = current;
     }else{
@@ -150,7 +150,7 @@ class dll{
     ++size_;
   }
   void pop_back(){
-    dll_node * current = head;
+    DllNode * current = head;
     if(current != nullptr && !destroyed){
       while(current->next != nullptr){
         current = current->next;
@@ -165,9 +165,9 @@ class dll{
     }
   }
   void push_front(int num){
-    dll_node * current = head;
+    DllNode * current = head;
     if(current != nullptr && !destroyed){
-      dll_node * a = new dll_node;
+      DllNode * a = new Dll_node;
       a->x = num;
       a->next = current;
       current->prev = a;
@@ -178,9 +178,9 @@ class dll{
     ++size_;
   }
   void pop_front(){
-    dll_node * current = head;
+    DllNode * current = head;
     if(current != nullptr && !destroyed){
-      dll_node * y = current->next;
+      DllNode * y = current->next;
       if(y != nullptr){
         y->prev = nullptr;
         head = y;
@@ -192,7 +192,7 @@ class dll{
     }
   }
   void insert(int index, int num){
-    dll_node * current = head;
+    DllNode * current = head;
     int i=0;
     if(current != nullptr && !destroyed){
       while(true){
@@ -207,7 +207,7 @@ class dll{
         }
       }
       if(head == current){
-        dll_node * a = new dll_node;
+        DllNode * a = new Dll_node;
         a->x = num;
 
         a->next = current;
@@ -215,8 +215,8 @@ class dll{
 
         head = a;
       }else if(index < size_){
-        dll_node * a = current->prev;
-        dll_node * b = new dll_node;
+        DllNode * a = current->prev;
+        DllNode * b = new Dll_node;
         b->x = num;
 
         a->next = b;
@@ -225,7 +225,7 @@ class dll{
         b->next = current;
         b->prev = a;
       }else{
-        current->next = new dll_node;
+        current->next = new DllNode;
         current->next->x = num;
         current->next->prev = current;
       }
@@ -235,10 +235,10 @@ class dll{
     ++size_;
   }
   void insert(iterator i, int num){
-    dll_node * current = i.ip;
+    DllNode * current = i.ip;
     if(current != nullptr && !destroyed){ 
       if(head == current){
-        dll_node * a = new dll_node;
+        DllNode * a = new Dll_node;
         a->x = num;
 
         a->next = current;
@@ -246,8 +246,8 @@ class dll{
 
         head = a;
       }else{
-        dll_node * a = current->prev;
-        dll_node * b = new dll_node;
+        DllNode * a = current->prev;
+        DllNode * b = new Dll_node;
         b->x = num;
 
         a->next = b;
@@ -262,7 +262,7 @@ class dll{
     ++size_;
   }
   void remove(int index){
-    dll_node * current = head;
+    DllNode * current = head;
     int i=0;
     if(current != nullptr && !destroyed){
       while(true){
@@ -277,7 +277,7 @@ class dll{
         }
       }
       if(head == current){
-        dll_node * y = current->next;
+        DllNode * y = current->next;
         if(y != nullptr){
           y->prev = nullptr;
           head = y;
@@ -286,12 +286,12 @@ class dll{
         }
         delete current;
       }else if(current->next == nullptr){
-        dll_node * w = current->prev;
+        DllNode * w = current->prev;
         w->next = nullptr;
         delete current;
       }else{
-        dll_node * w = current->prev;
-        dll_node * y = current->next;
+        DllNode * w = current->prev;
+        DllNode * y = current->next;
         w->next = y;
         y->prev = w;
         delete current;
@@ -302,10 +302,10 @@ class dll{
     }
   }
   void remove(iterator i){
-    dll_node * current = i.ip;
+    DllNode * current = i.ip;
     if(current != nullptr && !destroyed){
       if(head == current){
-        dll_node * y = current->next;
+        DllNode * y = current->next;
         if(y != nullptr){
           y->prev = nullptr;
           head = y;
@@ -314,12 +314,12 @@ class dll{
         }
         delete current;
       }else if(current->next == nullptr){
-        dll_node * w = current->prev;
+        DllNode * w = current->prev;
         w->next = nullptr;
         delete current;
       }else{
-        dll_node * w = current->prev;
-        dll_node * y = current->next;
+        DllNode * w = current->prev;
+        DllNode * y = current->next;
         w->next = y;
         y->prev = w;
         delete current;
@@ -336,7 +336,7 @@ class dll{
     remove(i);
   }
   void print(){
-    dll_node * current = head;
+    DllNode * current = head;
     if(current != nullptr && !destroyed){
       while(true){
         std::cout << "[" << current->x << "]";
@@ -351,7 +351,7 @@ class dll{
     }
   }
   void rprint(){
-    dll_node * current = head;
+    DllNode * current = head;
     if(current != nullptr && !destroyed){
       while(current->next != nullptr){
         current = current->next;
@@ -369,7 +369,7 @@ class dll{
     }
   }
   inline int& at(int index){
-    dll_node * current = head;
+    DllNode * current = head;
     int i=0;
     if(current != nullptr && !destroyed){
       while(true){
@@ -384,36 +384,36 @@ class dll{
         }
       }
     }else{
-      dll_error err;
+      DllError err;
       throw err;
     }
     return current->x;
   }
   inline int& at(iterator i){
-    dll_node * current = i.ip;
+    DllNode * current = i.ip;
     if(current != nullptr && !destroyed){
       return current->x;
     }
-    dll_error err;
+    DllError err;
     throw err;
   }
   inline int& front(){
-    dll_node * current = head;
+    DllNode * current = head;
     if(current != nullptr && !destroyed){
       return current->x;
     }
-    dll_error err;
+    DllError err;
     throw err;
   }
   inline int& back(){
-    dll_node * current = head;
+    DllNode * current = head;
     if(current != nullptr && !destroyed){
       while(current->next != nullptr){
         current = current->next;
       }
       return current->x;
     }
-    dll_error err;
+    DllError err;
     throw err;
   }
   inline int size(){
@@ -423,14 +423,14 @@ class dll{
     return size_ == 0;
   }
   void reverse(){
-    dll_node * current = head;
+    DllNode * current = head;
     if(current != nullptr && !destroyed){
       int s = size_;
-      dll_node * temp = new dll_node;
+      DllNode * temp = new Dll_node;
       temp->x = current->x;
       while(current->next != nullptr){
         current = current->next;
-        temp->prev = new dll_node;
+        temp->prev = new DllNode;
         temp->prev->x = current->x;
         temp->prev->next = temp;
         temp = temp->prev;
@@ -492,9 +492,9 @@ class dll{
     }
   }
   void clear(){
-    dll_node * current = head;
+    DllNode * current = head;
     while(current != nullptr){
-      dll_node * temp = current->next;
+      DllNode * temp = current->next;
       delete current;
       current = temp;
     }
@@ -502,10 +502,10 @@ class dll{
     size_ = 0;
   }
   void destroy(){
-    dll_node * current = head;
+    DllNode * current = head;
     if(!destroyed){
       while(current != nullptr){
-        dll_node * temp = current->next;
+        DllNode * temp = current->next;
         delete current;
         current = temp;
       }
@@ -515,13 +515,13 @@ class dll{
       //std::cout << "Destroyed" << std::endl;
     }
   }
-  ~dll(){
+  ~Dll(){
     destroy();
   }
 };
 
 int main(){
-  dll a;
+  Dll a;
   a.push_back(10);
   a.push_back(4);
   a.push_back(3);
@@ -529,7 +529,7 @@ int main(){
   a.push_back(2);
   a.push_back(0);
   a.print();
-  /*for(dll::iterator i=a.end()-1; i!=a.begin(); --i){
+  /*for(Dll::iterator i=a.end()-1; i!=a.begin(); --i){
     std::cerr << "Hello " << std::endl;
     std::cout << "Data: " << *i << std::endl;
   }*/
