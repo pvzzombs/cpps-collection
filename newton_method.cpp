@@ -2,11 +2,11 @@
 #include <vector>
 #include <cmath>
 
-struct polynomial{
+struct Polynomial{
   std::vector<double> nc;
   double hd;
-  polynomial(){}
-  polynomial(std::vector<double> p){
+  Polynomial(){}
+  Polynomial(std::vector<double> p){
     nc = p;
     hd = p.size()-1;
   }
@@ -24,21 +24,21 @@ struct polynomial{
     }
     return temp;
   }
-  polynomial derivative(){
+  Polynomial derivative(){
     double hd_ = hd;
     std::vector<double> d;
     for(int i=0; i<hd; i++){
       d.push_back(hd_ * nc.at(i));
       hd_--;
     }
-    return polynomial(d);
+    return Polynomial(d);
   }
 
 };
 
-double nm(polynomial p, double x0){
+double nm(Polynomial p, double x0){
   double x = x0, xnew;
-  polynomial p_ = p.derivative();
+  Polynomial p_ = p.derivative();
   double eps = 0.0000001;
   double tol = 0.0000001;
   double t;
@@ -64,7 +64,7 @@ double nm(polynomial p, double x0){
 
 int main(){
   std::vector<double> v={1,4,4};
-  polynomial a(v);
+  Polynomial a(v);
   std::cout << a.eval(-1.5) << std::endl;
   std::cout << a.derivative().eval(2) << std::endl;
   std::cout << nm(a, 2) << std::endl;

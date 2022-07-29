@@ -2,14 +2,14 @@
 #include <vector>
 
 enum flags { ARIT, GEOM };
-struct item{
+struct Item{
   flags type;
   int num;
 };
 
-class seq_solver {
+class SeqSolver {
 private:
-  std::vector<item> s;
+  std::vector<Item> s;
   int last_num;
   int err;
 public:
@@ -19,7 +19,7 @@ public:
   int get_result(){
     return last_num;
   }
-  bool arit(std::vector<item> &a, item &c){
+  bool arit(std::vector<Item> &a, Item &c){
     //std::cout << "arith --------" << std::endl
     for(int i=0; i<a.size(); i++){
       a.at(i).type = ARIT;
@@ -37,7 +37,7 @@ public:
     return true;
   }
   
-  bool geom(std::vector<item> &a, item &c){
+  bool geom(std::vector<Item> &a, Item &c){
     for(int i=0; i<a.size(); i++){
       a.at(i).type = GEOM;
       std::cout << a.at(i).num << std::endl;
@@ -55,7 +55,7 @@ public:
     return true;
   }
   
-  bool reset_item(std::vector<item> &a, item &c){
+  bool reset_Item(std::vector<Item> &a, Item &c){
     for(int i=0; i<a.size(); i++){
       a.at(i).type = ARIT;
     }
@@ -70,12 +70,12 @@ public:
     int index = 0;
     int depth = 0;
     
-    std::vector<item> arr(inp.size());
+    std::vector<Item> arr(inp.size());
     for(int i=0; i<arr.size(); i++){
       arr.at(i).num = inp.at(i);
     }
     
-    std::vector<item> tmp;
+    std::vector<Item> tmp;
     
     while(true){
       if(depth == 5){
@@ -83,15 +83,15 @@ public:
         break;
       }
       
-      item c;
-      item first_term = arr.at(0);
+      Item c;
+      Item first_term = arr.at(0);
       bool is_arit = arit(arr, c);
       bool is_geom = false;
       if(!is_arit){
         is_geom = geom(arr, c);        
       }
       if(!is_geom){
-        reset_item(arr, c);
+        reset_Item(arr, c);
         std::cout << "---";
       }
       std::cout << "c is " << c.num << std::endl;
@@ -159,11 +159,11 @@ public:
   
   bool arithmetic(std::vector<int> &inp, int nth){
     err = 0;
-    std::vector<item> arr(inp.size());
+    std::vector<Item> arr(inp.size());
     for(int i=0; i<inp.size(); i++){
       arr.at(i).num = inp.at(i);
     }
-    item c;
+    Item c;
     int d, a_1 = inp.at(0);
     bool is_arit = arit(arr, c);
     d = c.num;
@@ -176,11 +176,11 @@ public:
   
   bool geometric(std::vector<int> &inp, int nth){
     err = 0;
-    std::vector<item> arr(inp.size());
+    std::vector<Item> arr(inp.size());
     for(int i=0; i<inp.size(); i++){
       arr.at(i).num = inp.at(i);
     }
-    item c;
+    Item c;
     int r, a_1 = inp.at(0);
     bool is_geom = geom(arr, c);
     r = c.num;
@@ -198,7 +198,7 @@ public:
 };
 
 int main(int argc, char *argv[]) {
-  seq_solver m;
+  SeqSolver m;
   std::vector<int> a = {1,3,5,7,9};
   std::cout <<  m.arithmetic(a, 10) << std::endl;
   std::cout << m.get_result() << std::endl;

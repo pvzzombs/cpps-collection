@@ -2,7 +2,7 @@
 #include <vector>
 #include <string>
 
-class polynomial{
+class Polynomial{
   std::vector<double> nc;
   std::vector<int> epn;
   bool is_sign(char c){
@@ -18,8 +18,8 @@ class polynomial{
     return c == '^';
   }
 public:
-  polynomial(){}
-  polynomial(std::string str){
+  Polynomial(){}
+  Polynomial(std::string str){
     int sign = 1;
     std::string tmpnum;
     bool is_epn = false;
@@ -105,11 +105,11 @@ public:
       epn = b;
     }
   }
-  polynomial(std::vector<double> nc_, std::vector<int> epn_){
+  Polynomial(std::vector<double> nc_, std::vector<int> epn_){
     nc = nc_;
     epn = epn_;
   }
-  polynomial(double * nc_, int * epn_, int len){
+  Polynomial(double * nc_, int * epn_, int len){
     nc.reserve(len);
     epn.reserve(len);
     for(int i=0; i<len; i++){
@@ -141,7 +141,7 @@ public:
     }
     return sum;
   }
-  polynomial derivative(){
+  Polynomial derivative(){
     std::vector<double> a;
     std::vector<int> b;
     for(int i=0; i<nc.size(); i++){
@@ -149,7 +149,7 @@ public:
       a.push_back(nc.at(i) * epn.at(i));
       b.push_back(epn.at(i) - 1);
     }
-    return polynomial(a, b);
+    return Polynomial(a, b);
   }
   void print(){
     for(int i=0; i<nc.size(); i++){
@@ -191,11 +191,11 @@ public:
 int main(){
   //double a[] = {1,4,4};
   //int b[] = {2,1,0};
-  //polynomial c(a, b, 3);
+  //Polynomial c(a, b, 3);
   //std::cout << c.eval(1) << std::endl;
   //c.print();
   //c.derivative().print();
-  polynomial d("x^2 + 4x - 2 + x^-2");
+  Polynomial d("x^2 + 4x - 2 + x^-2");
   d.print();
   return 0;
 }
