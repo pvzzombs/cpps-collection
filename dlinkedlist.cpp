@@ -410,6 +410,7 @@ class dll{
   void reverse(){
     dll_node * current = head;
     if(current != nullptr && !destroyed){
+      int s = size_;
       dll_node * temp = new dll_node;
       temp->x = current->x;
       while(current->next != nullptr){
@@ -421,6 +422,7 @@ class dll{
       }
       clear();
       head = temp;
+      size_ = s;
     }
   }
   void sort(){
@@ -528,6 +530,8 @@ int main(){
   a.reverse();
   a.print();
   a.rprint();
+  a.push_back(7);
+  a.print();
   //std::cout << a.size() << std::endl;
   return 0;
 }
