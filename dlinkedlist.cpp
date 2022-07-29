@@ -18,22 +18,6 @@ class dll{
     friend class dll;
     dll_node * ip;
     bool is_begin, is_end;
-    public:
-    iterator(): ip(nullptr), is_begin(false),
-    is_end(false){
-    }
-    iterator& operator++(){
-      if(ip != nullptr){
-        ip = ip->next;
-      }
-      return *this;
-    }
-    iterator& operator--(){
-      if(ip != nullptr){
-        ip = ip->prev;
-      }
-      return *this;
-    }
     iterator operator+(size_t i){
       iterator tmp = *this;
       for(size_t j=0; j<i; j++){
@@ -51,6 +35,22 @@ class dll{
         }
       }
       return tmp;
+    }
+    public:
+    iterator(): ip(nullptr), is_begin(false),
+    is_end(false){
+    }
+    iterator& operator++(){
+      if(ip != nullptr){
+        ip = ip->next;
+      }
+      return *this;
+    }
+    iterator& operator--(){
+      if(ip != nullptr){
+        ip = ip->prev;
+      }
+      return *this;
     }
     int& operator*(){
       return ip->x;
@@ -407,6 +407,22 @@ class dll{
   inline bool empty(){
     return size_ == 0;
   }
+  void reverse(){
+    dll_node * current = head;
+    if(current != nullptr && !destroyed){
+      dll_node * temp = new dll_node;
+      temp->x = current->x;
+      while(current->next != nullptr){
+        current = current->next;
+        temp->prev = new dll_node;
+        temp->prev->x = current->x;
+        temp->prev->next = temp;
+        temp = temp->prev;
+      }
+      clear();
+      head = temp;
+    }
+  }
   void sort(){
     if(head != nullptr && !destroyed){
       for(int i=0; i<size_; i++){
@@ -467,9 +483,9 @@ class dll{
       dll_node * temp = current->next;
       delete current;
       current = temp;
-      --size_;
     }
     head = nullptr;
+    size_ = 0;
   }
   void destroy(){
     dll_node * current = head;
@@ -478,9 +494,9 @@ class dll{
         dll_node * temp = current->next;
         delete current;
         current = temp;
-        --size_;
       }
       head = nullptr;
+      size_ = 0;
       destroyed = true;
       //std::cout << "Destroyed" << std::endl;
     }
@@ -492,21 +508,26 @@ class dll{
 
 int main(){
   dll a;
-  a.push_back(1);
+  a.push_back(10);
   a.push_back(4);
   a.push_back(3);
   a.push_back(5);
   a.push_back(2);
-  //dll::iterator b = a.begin()+2;
+  a.push_back(0);
+  a.print();
+  //dll::iterator b = a.begin()+1;
+  //dll::iterator c = a.end()-1;
   //b = a.end();
   /*for(dll::iterator i=a.end()-1; i!=a.begin(); --i){
     std::cerr << "Hello " << std::endl;
     std::cout << "Data: " << *i << std::endl;
   }*/
   //a.remove(b);
-  //a.sort(a.end(), a.begin());
+  //a.sort(b, c);
   //a.rsort();
+  a.reverse();
   a.print();
+  a.rprint();
   //std::cout << a.size() << std::endl;
   return 0;
 }
