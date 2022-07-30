@@ -58,6 +58,16 @@ class Dll{
       }
       return *this;
     }
+    Iterator operator++(int t){
+      Iterator tmp = *this;
+      ++(*this);
+      return tmp;
+    }
+    Iterator operator--(int t){
+      Iterator tmp = *this;
+      --(*this);
+      return tmp;
+    }
     int& operator*(){
       if(ip != nullptr){
         return ip->x;
