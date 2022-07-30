@@ -1,58 +1,59 @@
 #include <iostream>
 #include <vector>
 
-enum p_type{
-  LETTER
-  WORD,
-  SPACE,
-  EOL,
-  EOF
-}
+enum PType{
+  kLETTER,
+  kWORD,
+  kSPACE,
+  kEOL,
+  kEOF
+};
 
-enum p_token{
-  p_type type;
+struct PToken{
+  PType type;
   int col;
   int line;
   char value;
-}
+};
 
-bool is_alpha(char c){
+bool IsAlpha(char c){
   return (c >= 'a' && c <= 'z') || 
          (c >= 'A' && c <= 'Z');
 }
 
-bool is_space(char c){
+bool IsSpace(char c){
   return c == ' ' || c == '\t';
 }
 
-bool is_eol(char c){
+bool IsEol(char c){
   return c == '\n';
 }
 
 class parser{
 public:
-  std::vector<p_token> parse(std::string inp){
-    std::vector<p_token> arr;
+  std::vector<PToken> parse(std::string inp){
+    std::vector<PToken> arr;
     arr.reserve(inp.size());
-    p_token t;
+    PToken t;
     int line = 1;
 
     for(int i=0; i<inp.size(); i++){
       t.line = line;
       t.col = i+1;
       t.value = inp.at(i);
-      if(is_alpha(inp.at(i))){
-        t.type = LETTER;
-      }else if(is_space(inp.at(i))){
-        t.type = SPACE;
-      }else if(is_eol(inp.at(i))){
-        t.type = EOL;
+      if(IsAlpha(inp.at(i))){
+        t.type = kLETTER;
+      }else if(IsSpace(inp.at(i))){
+        t.type = kSPACE;
+      }else if(IsEol(inp.at(i))){
+        t.type = kEOL;
         line++;
       }
       arr.push_back(t);
     }
+    return arr;
   }
-}
+};
 
 int main(){
   parser p;

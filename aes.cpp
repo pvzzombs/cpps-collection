@@ -27,7 +27,7 @@ int main(){
 				0x4d, 0x2b, 0x30, 0xc5
 		};
 
-   aes test;
+   Aes test;
    test.set_key(k);
    test.encrypt(m);
    std::cout << "%%%%%" << std::endl;

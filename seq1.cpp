@@ -1,9 +1,9 @@
 #include <iostream>
 #include <vector>
 
-enum flags { ARIT, GEOM };
+enum Flags { kARIT, kGEOM };
 struct Item{
-  flags type;
+  Flags type;
   int num;
 };
 
@@ -22,7 +22,7 @@ public:
   bool arit(std::vector<Item> &a, Item &c){
     //std::cout << "arith --------" << std::endl
     for(int i=0; i<a.size(); i++){
-      a.at(i).type = ARIT;
+      a.at(i).type = kARIT;
     }
     int q = a.at(1).num - a.at(0).num;
     //std::cout << "common diff" << c << std::endl;
@@ -33,13 +33,13 @@ public:
       }
     }
     c.num = q;
-    c.type = ARIT;
+    c.type = kARIT;
     return true;
   }
   
   bool geom(std::vector<Item> &a, Item &c){
     for(int i=0; i<a.size(); i++){
-      a.at(i).type = GEOM;
+      a.at(i).type = kGEOM;
       std::cout << a.at(i).num << std::endl;
     }
     int q = a.at(1).num / a.at(0).num;
@@ -50,16 +50,16 @@ public:
       }
     }
     c.num = q;
-    c.type = GEOM;
+    c.type = kGEOM;
     std::cout << "geo end ------" <<std::endl;
     return true;
   }
   
   bool reset_Item(std::vector<Item> &a, Item &c){
     for(int i=0; i<a.size(); i++){
-      a.at(i).type = ARIT;
+      a.at(i).type = kARIT;
     }
-    c.type = ARIT;
+    c.type = kARIT;
     return true;
   }
   
@@ -124,7 +124,7 @@ public:
         tmp.clear(); tmp.resize(arr.size()-1);
         for(int i=0; i<arr.size()-1; i++){
           tmp.at(i).num = arr.at(i+1).num - arr.at(i).num;
-          tmp.at(i).type = ARIT;
+          tmp.at(i).type = kARIT;
         }
         arr = tmp;
       }
@@ -136,11 +136,11 @@ public:
     while(index > 0){
       for(int i=index; i<nth; i++){
         switch(s.at(i).type){
-          case ARIT:
+          case kARIT:
             s.at(i).num = s.at(i).num + s.at(i-1).num;
             s.at(i).type = s.at(i-1).type;
             break;
-          case GEOM:
+          case kGEOM:
           s.at(i).num = s.at(i).num * s.at(i-1).num;
           s.at(i).type = s.at(i-1).type;
         }

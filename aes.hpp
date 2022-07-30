@@ -14,7 +14,7 @@ std::string ith(T i){
   return ss.str();
 }
 // TODO ciw
-class aes {
+class Aes {
   arr_<arr_<uint8_t>> sbox;
   arr_<arr_<uint8_t>> isbox;
   arr_<arr_<uint8_t>> state;
@@ -360,7 +360,7 @@ public:
 		//printState();
 	}
 
-  aes(){
+  Aes(){
     init();
     init_sbox();
   }

@@ -5,7 +5,7 @@ double f(double x){
   return x*x +4*x + 4;
 }
 
-int sign(double q){
+int Sign(double q){
   if(q > 0){
     return 1;
   }
@@ -15,7 +15,7 @@ int sign(double q){
   return 0;
 }
 
-double bisection(double a, double b){
+double Bisection(double a, double b){
   double t = 0.00001, c=(a+b)/2;
   //double f_a, f_c=f(c);
   int Max = 10000, i=0;
@@ -45,6 +45,6 @@ double bisection(double a, double b){
 }
 
 int main(){
-  std::cout << "Answer: " <<  bisection(-3,3);
+  std::cout << "Answer: " <<  Bisection(-3,3);
   return 0;
 }

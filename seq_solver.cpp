@@ -9,14 +9,14 @@ int nth_result = 0;
 int error_flag = 0;
 int max_depth = 5;
 
-enum Seq_Type { ARIT_SEQ, GEO_SEQ };
-struct ms_item{
-  Seq_Type type;
+enum SeqType { kARIT_SEQ, kGEO_SEQ };
+struct MsItem{
+  SeqType type;
   int num;
 };
-std::vector<ms_item> ms_stack;
+std::vector<MsItem> ms_stack;
 
-bool is_common_diff(std::vector<int> &arr){
+bool IsCommonDiff(std::vector<int> &arr){
   bool cd = true;
   for(int i=0; i<arr.size()-1; i++){
     if(arr[i] != arr[i+1]){
@@ -27,7 +27,7 @@ bool is_common_diff(std::vector<int> &arr){
   return cd;
 }
 
-bool is_common_ratio(std::vector<int> &arr){
+bool IsCommonRatio(std::vector<int> &arr){
   bool cd = true;
   for(int i=0; i<arr.size()-1; i++){
     if(arr[i] != arr[i+1]){
@@ -38,7 +38,7 @@ bool is_common_ratio(std::vector<int> &arr){
   return cd;
 }
 
-void multi_stage(std::vector<int> &arr, int index, int depth, int N){
+void MultiStage(std::vector<int> &arr, int index, int depth, int N){
   if(depth == max_depth || arr.size() < 2){
     error_flag = 1;
     return;
@@ -59,13 +59,13 @@ void multi_stage(std::vector<int> &arr, int index, int depth, int N){
     // std::cout << arr2.at(i) <<  std::endl;
   }
   
-  bool is_cd = is_common_diff(arr2);
-  bool is_cr = is_common_ratio(arr3);
+  bool is_cd = IsCommonDiff(arr2);
+  bool is_cr = IsCommonRatio(arr3);
   
   if(is_cd){
     int cd = arr2.at(0);
     for(int i=index; i<nth; i++){
-      ms_stack.at(i).type = ARIT_SEQ;
+      ms_stack.at(i).type = kARIT_SEQ;
       ms_stack.at(i).num = cd;
     }
     
@@ -77,7 +77,7 @@ void multi_stage(std::vector<int> &arr, int index, int depth, int N){
   }else if(is_cr){
     int cd = arr3.at(0);
     for(int i=index; i<nth; i++){
-      ms_stack.at(i).type = GEO_SEQ;
+      ms_stack.at(i).type = kGEO_SEQ;
       ms_stack.at(i).num = cd;
     }
     
@@ -87,15 +87,15 @@ void multi_stage(std::vector<int> &arr, int index, int depth, int N){
     }
     std::cout << "]" <<  std::endl;
   }else{
-    ms_stack.at(index).type = ARIT_SEQ;
+    ms_stack.at(index).type = kARIT_SEQ;
     ms_stack.at(index).num = arr.at(index);
-    multi_stage(arr2, index+1, depth+1, N-1);
+    MultiStage(arr2, index+1, depth+1, N-1);
     for(int i=index+1; i<nth; i++){
       switch(ms_stack.at(i).type){
-        case ARIT_SEQ:
+        case kARIT_SEQ:
           ms_stack.at(i).num = ms_stack.at(i).num + ms_stack.at(i-1).num;
           break;
-        case GEO_SEQ:
+        case kGEO_SEQ:
           ms_stack.at(i).num = ms_stack.at(i).num * ms_stack.at(i-1).num;
           ms_stack.at(i).type = ms_stack.at(i-1).type;
           break;
@@ -112,20 +112,20 @@ void multi_stage(std::vector<int> &arr, int index, int depth, int N){
   }
 }
 
-void find_nth(){
+void FindNth(){
   
   // Multi Stage
   ms_stack.clear();
   //ms_stack.reserve(nth);
   ms_stack.resize(nth);
-  multi_stage(inputs, 0, 0, nth);
+  MultiStage(inputs, 0, 0, nth);
   
   for(int i=1; i<nth; i++){
     switch(ms_stack.at(i).type){
-      case ARIT_SEQ:
+      case kARIT_SEQ:
         ms_stack.at(i).num = ms_stack.at(i).num + ms_stack.at(i-1).num;
         break;
-      case GEO_SEQ:
+      case kGEO_SEQ:
         ms_stack.at(i).num = ms_stack.at(i).num * ms_stack.at(i-1).num;
         ms_stack.at(i).type = ms_stack.at(i-1).type;
         break;
@@ -137,7 +137,7 @@ void find_nth(){
 }
 
 
-void driver(){
+void Driver(){
   char choice = '\0';
   std::string temp;
   do{
@@ -152,7 +152,7 @@ void driver(){
     for(int i=0; i<len_of_nums; i++){
       std::cin >> inputs.at(i);
     }
-    find_nth();
+    FindNth();
     std::cout <<  nth_result << std::endl;
     //std::cin.clear();
     std::cin.ignore(1000, '\n');
@@ -165,6 +165,6 @@ void driver(){
 }
 
 int main(int argc, char *argv[]) {
-  driver();
+  Driver();
   return 0;
 }
