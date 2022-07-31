@@ -1,9 +1,10 @@
 #include <iostream>
 #include <exception>
 
+template<typename Z>
 class Dll{
   struct DllNode{
-    int x;
+    Z x;
     DllNode * prev;
     DllNode * next;
     DllNode(){
@@ -68,7 +69,7 @@ class Dll{
       --(*this);
       return tmp;
     }
-    int& operator*(){
+    Z& operator*(){
       if(ip != nullptr){
         return ip->x;
       }
@@ -86,10 +87,10 @@ class Dll{
       return ip == rhs.ip;
     }
   };
-  inline void init(int num, bool b=false){
+  inline void init(Z data, bool b=false){
     if(head == nullptr && !destroyed){
       head = new DllNode;
-      head->x = num;
+      head->x = data;
       if(b){
         ++size_;
       }
@@ -145,17 +146,17 @@ class Dll{
     std::swap(destroyed, tmp.destroyed);
     return *this;
   }
-  void push_back(int num){
+  void push_back(Z data){
     DllNode * current = head;
     if(current != nullptr && !destroyed){
       while(current->next != nullptr){
         current = current->next;
       }
       current->next = new DllNode;
-      current->next->x = num;
+      current->next->x = data;
       current->next->prev = current;
     }else{
-      init(num);
+      init(data);
     }
     ++size_;
   }
@@ -174,16 +175,16 @@ class Dll{
       --size_;
     }
   }
-  void push_front(int num){
+  void push_front(Z data){
     DllNode * current = head;
     if(current != nullptr && !destroyed){
       DllNode * a = new DllNode;
-      a->x = num;
+      a->x = data;
       a->next = current;
       current->prev = a;
       head = a;
     }else{
-      init(num);
+      init(data);
     }
     ++size_;
   }
@@ -201,7 +202,7 @@ class Dll{
       --size_;
     }
   }
-  void insert(int index, int num){
+  void insert(int index, Z data){
     DllNode * current = head;
     int i=0;
     if(current != nullptr && !destroyed){
@@ -218,7 +219,7 @@ class Dll{
       }
       if(head == current){
         DllNode * a = new DllNode;
-        a->x = num;
+        a->x = data;
 
         a->next = current;
         current->prev = a;
@@ -227,7 +228,7 @@ class Dll{
       }else if(index < size_){
         DllNode * a = current->prev;
         DllNode * b = new DllNode;
-        b->x = num;
+        b->x = data;
 
         a->next = b;
         current->prev = b;
@@ -236,20 +237,20 @@ class Dll{
         b->prev = a;
       }else{
         current->next = new DllNode;
-        current->next->x = num;
+        current->next->x = data;
         current->next->prev = current;
       }
     }else{
-      init(num);
+      init(data);
     }
     ++size_;
   }
-  void insert(Iterator i, int num){
+  void insert(Iterator i, Z data){
     DllNode * current = i.ip;
     if(current != nullptr && !destroyed){ 
       if(head == current){
         DllNode * a = new DllNode;
-        a->x = num;
+        a->x = data;
 
         a->next = current;
         current->prev = a;
@@ -258,7 +259,7 @@ class Dll{
       }else{
         DllNode * a = current->prev;
         DllNode * b = new DllNode;
-        b->x = num;
+        b->x = data;
 
         a->next = b;
         current->prev = b;
@@ -267,7 +268,7 @@ class Dll{
         b->prev = a;
       }
     }else{
-      init(num);
+      init(data);
     }
     ++size_;
   }
@@ -378,7 +379,7 @@ class Dll{
       std::cout << std::endl;
     }
   }
-  inline int& at(int index){
+  inline Z& at(int index){
     DllNode * current = head;
     int i=0;
     if(current != nullptr && !destroyed){
@@ -399,7 +400,7 @@ class Dll{
     }
     return current->x;
   }
-  inline int& at(Iterator i){
+  inline Z& at(Iterator i){
     DllNode * current = i.ip;
     if(current != nullptr && !destroyed){
       return current->x;
@@ -407,7 +408,7 @@ class Dll{
     DllError err;
     throw err;
   }
-  inline int& front(){
+  inline Z& front(){
     DllNode * current = head;
     if(current != nullptr && !destroyed){
       return current->x;
@@ -415,7 +416,7 @@ class Dll{
     DllError err;
     throw err;
   }
-  inline int& back(){
+  inline Z& back(){
     DllNode * current = head;
     if(current != nullptr && !destroyed){
       while(current->next != nullptr){
@@ -531,7 +532,7 @@ class Dll{
 };
 
 int main(){
-  Dll a;
+  Dll<int> a;
   a.push_back(10);
   a.push_back(4);
   a.push_back(3);
