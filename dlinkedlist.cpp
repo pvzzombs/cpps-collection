@@ -434,21 +434,19 @@ class Dll{
     return size_ == 0;
   }
   void reverse(){
+    DllNode * temp = nullptr;
     DllNode * current = head;
     if(current != nullptr && !destroyed){
-      int s = size_;
-      DllNode * temp = new DllNode;
-      temp->x = current->x;
-      while(current->next != nullptr){
-        current = current->next;
-        temp->prev = new DllNode;
-        temp->prev->x = current->x;
-        temp->prev->next = temp;
-        temp = temp->prev;
+      while(current != nullptr){
+        temp = current->prev;
+        current->prev = current->next;
+        current->next = temp;
+        current = current->prev;
       }
-      clear();
-      head = temp;
-      size_ = s;
+
+      if(temp != nullptr){
+        head = temp->prev;
+      }
     }
   }
   void sort(){
