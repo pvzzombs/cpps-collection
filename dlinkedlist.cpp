@@ -434,18 +434,15 @@ class Dll{
     return size_ == 0;
   }
   void reverse(){
-    DllNode * temp = nullptr;
     DllNode * current = head;
+    DllNode * temp = nullptr;
     if(current != nullptr && !destroyed){
       while(current != nullptr){
         temp = current->prev;
         current->prev = current->next;
         current->next = temp;
+        head = current;
         current = current->prev;
-      }
-
-      if(temp != nullptr){
-        head = temp->prev;
       }
     }
   }
