@@ -120,22 +120,22 @@ class Dll{
   }
   Dll(const Dll &rhs): head(nullptr), size_(0), destroyed(false){
     if(rhs.size_ > 0 && !rhs.destroyed){
-      DllNode * current = nullptr;
-      DllNode * rhs_ = rhs.head;
-      head = new DllNode;
-      head->x = rhs.head->x;
-      current = head;
+      DllNode * a = new DllNode;
+      DllNode * b = nullptr;
+      DllNode * source = rhs.head;
+      a->x = source->x;
+      head = a;
       ++size_;
-      while(true){
-        if(rhs_->next != nullptr){
-          current->next = new DllNode;
-          current->next->x = rhs_->next->x;
-          current = current->next;
-          rhs_ = rhs_->next;
-          ++size_;
-        }else{
-          break;
-        }
+      source = source->next;
+      while(source != nullptr){
+        b = new DllNode;
+        b->x = source->x;
+        a->next = b;
+        b->prev = a;
+        source = source->next;
+        a = b;
+        b = nullptr;
+        ++size_;
       }
     }
   }
@@ -534,7 +534,10 @@ int main(){
   a.push_back(5);
   a.push_back(2);
   a.push_back(0);
+  Dll<int> b(a);
   a.print();
+  b.print();
+  b.rprint();
   /*for(Dll::Iterator i=a.end()-1; i!=a.begin(); --i){
     std::cerr << "Hello " << std::endl;
     std::cout << "Data: " << *i << std::endl;
@@ -542,8 +545,8 @@ int main(){
   //a.remove(b);
   //a.sort(b, c);
   //a.rsort();
-  a.reverse();
-  a.print();
-  std::cout << a.size() << std::endl;
+  //a.reverse();
+  //a.print();
+  std::cout << b.size() << std::endl;
   return 0;
 }
