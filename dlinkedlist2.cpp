@@ -14,7 +14,7 @@ class Dll{
   };
   DllNode * head;
   DllNode * tail;
-  int internal_size;
+  size_t internal_size;
   bool destroyed;
   public:
   class DllError: public std::exception{
@@ -77,17 +77,55 @@ class Dll{
       --internal_size;
     }
   }
-  void push_front(Z data){
+  void push_front(Z m){
+    DllNode * n = new DllNode;
+    n->data = m;
+    n->prev = head;
+    n->next = head->next;
+    head->next->prev = n;
+    head->next = n;
+    ++internal_size;
   }
   void pop_front(){
-    
+    if(internal_size > 0){
+      DllNode * temp = head->next;
+      temp->next->prev = head;
+      head->next = temp->next;
+      delete temp;
+      --internal_size;
+    }
   }
-  void insert(int index, Z data){
+  void insert(size_t index, Z m){
+    DllNode * current = head->next;
+    size_t i=0;
+    while(i != index && current != tail){
+      current = current->next;
+      ++i;
+    }
+    DllNode * n = new DllNode;
+    n->data = m;
+    n->prev = current->prev;
+    n->next = current;
+    current->prev->next = n;
+    current->prev = n;
+    ++internal_size;
   }
-  void remove(int index){
-    
+  void remove(size_t index){
+    if(internal_size > 0 && index < internal_size){
+      DllNode * current = head->next;
+      size_t i=0;
+      while(i != index && current->next != tail){
+        current = current->next;
+        ++i;
+      }
+      current->prev->next = current->next;
+      current->next->prev = current->prev;
+      delete current;
+      --internal_size;
+    }
   }
-  inline void erase(int index){
+  inline void erase(size_t index){
+    remove(index);
   } 
   void print(){
     DllNode * current = head->next;
@@ -164,10 +202,14 @@ int main(){
   a.push_back(5);
   a.push_back(2);
   a.push_back(0);
+  a.insert(9, 9);
+  a.remove(6);
   a.print();
   Dll<int> b(a);
   b.rprint();
-  //b.print();
+  b.push_front(1);
+  b.push_front(7);
+  b.print();
   //b.rprint();
   /*for(Dll::Iterator i=a.end()-1; i!=a.begin(); --i){
     std::cerr << "Hello " << std::endl;
