@@ -184,7 +184,18 @@ class Dll{
     return internal_size == 0;
   }
   void reverse(){
-    
+    if(internal_size > 1 && !destroyed){
+      DllNode * current = head;
+      while(current != nullptr){
+        DllNode * temp = current->prev;
+        current->prev = current->next;
+        current->next = temp;
+        current = current->prev;
+      }
+      DllNode * temp = head;
+      head = tail;
+      tail = temp;
+    }
   }
   void sort(){
     
@@ -231,7 +242,9 @@ int main(){
   a.push_back(2);
   a.push_back(0);
   a.back() = 12;
+  a.reverse();
   a.print();
+  a.rprint();
   Dll<int> b(a);
   b.rprint();
   b.push_front(1);
