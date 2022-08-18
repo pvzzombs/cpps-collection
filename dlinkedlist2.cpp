@@ -19,7 +19,7 @@ class Dll{
   public:
   class DllError: public std::exception{
     virtual const char* what() const throw(){
-      return "Invalid memory location or value does not exist";
+      return "Invalid memory location or invalid index or value does not exist";
     }
   };
   inline void init(){
@@ -60,16 +60,18 @@ class Dll{
     return *this;
   }
   void push_back(Z m){
-    DllNode * n = new DllNode;
-    n->data = m;
-    n->next = tail;
-    n->prev = tail->prev;
-    tail->prev->next = n;
-    tail->prev = n;
-    ++internal_size;
+    if(!destroyed){
+      DllNode * n = new DllNode;
+      n->data = m;
+      n->next = tail;
+      n->prev = tail->prev;
+      tail->prev->next = n;
+      tail->prev = n;
+      ++internal_size;
+    }
   }
   void pop_back(){
-    if(internal_size > 0){
+    if(internal_size > 0 && !destroyed){
       DllNode * temp = tail->prev;
       temp->prev->next = tail;
       tail->prev = temp->prev;
@@ -78,16 +80,18 @@ class Dll{
     }
   }
   void push_front(Z m){
-    DllNode * n = new DllNode;
-    n->data = m;
-    n->prev = head;
-    n->next = head->next;
-    head->next->prev = n;
-    head->next = n;
-    ++internal_size;
+    if(!destroyed){
+      DllNode * n = new DllNode;
+      n->data = m;
+      n->prev = head;
+      n->next = head->next;
+      head->next->prev = n;
+      head->next = n;
+      ++internal_size;
+    }
   }
   void pop_front(){
-    if(internal_size > 0){
+    if(internal_size > 0 && !destroyed){
       DllNode * temp = head->next;
       temp->next->prev = head;
       head->next = temp->next;
@@ -96,22 +100,24 @@ class Dll{
     }
   }
   void insert(size_t index, Z m){
-    DllNode * current = head->next;
-    size_t i=0;
-    while(i != index && current != tail){
-      current = current->next;
-      ++i;
+    if(!destroyed){
+      DllNode * current = head->next;
+      size_t i=0;
+      while(i != index && current != tail){
+        current = current->next;
+        ++i;
+      }
+      DllNode * n = new DllNode;
+      n->data = m;
+      n->prev = current->prev;
+      n->next = current;
+      current->prev->next = n;
+      current->prev = n;
+      ++internal_size;
     }
-    DllNode * n = new DllNode;
-    n->data = m;
-    n->prev = current->prev;
-    n->next = current;
-    current->prev->next = n;
-    current->prev = n;
-    ++internal_size;
   }
   void remove(size_t index){
-    if(internal_size > 0 && index < internal_size){
+    if(internal_size > 0 && index < internal_size && !destroyed){
       DllNode * current = head->next;
       size_t i=0;
       while(i != index && current->next != tail){
@@ -128,26 +134,48 @@ class Dll{
     remove(index);
   } 
   void print(){
-    DllNode * current = head->next;
-    while(current != tail){
-      std::cout << "[" << current->data << "]" << " ";
-      current = current->next;
+    if(!destroyed){
+      DllNode * current = head->next;
+      while(current != tail){
+        std::cout << "[" << current->data << "]" << " ";
+        current = current->next;
+      }
+      std::cout << std::endl;
     }
-    std::cout << std::endl;
   }
   void rprint(){
-    DllNode * current = tail->prev;
-    while(current != head){
-      std::cout << "[" << current->data << "]" << " ";
-      current = current->prev;
+    if(!destroyed){
+      DllNode * current = tail->prev;
+      while(current != head){
+        std::cout << "[" << current->data << "]" << " ";
+        current = current->prev;
+      }
+      std::cout << std::endl;
     }
-    std::cout << std::endl;
   }
-  inline Z& at(int index){
+  inline Z& at(size_t index){
+    if(internal_size > 0 && index < internal_size && !destroyed){
+      DllNode * current = head->next;
+      size_t i=0;
+      while(i != index && current->next != tail){
+        current=current->next;
+        ++i;
+      }
+      return current->data;
+    }
+    DllError err; throw err;
   } 
   inline Z& front(){
+    if(internal_size > 0 && !destroyed){
+      return head->next->data;
+    }
+    DllError err; throw err;
   }
   inline Z& back(){
+    if(internal_size > 0 && !destroyed){
+      return tail->prev->data;
+    }
+    DllError err; throw err;
   }
   inline int size(){
     return internal_size;
@@ -202,8 +230,7 @@ int main(){
   a.push_back(5);
   a.push_back(2);
   a.push_back(0);
-  a.insert(9, 9);
-  a.remove(6);
+  a.back() = 12;
   a.print();
   Dll<int> b(a);
   b.rprint();
