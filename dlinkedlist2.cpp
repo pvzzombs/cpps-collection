@@ -198,10 +198,30 @@ class Dll{
     }
   }
   void sort(){
-    
+    if(internal_size > 1 && !destroyed){
+      for(size_t i=0; i<internal_size; i++){
+        for(size_t j=i+1; j<internal_size; j++){
+          if(at(j) < at(i)){
+            Z temp = at(i);
+            at(i) = at(j);
+            at(j) = temp;
+          }
+        }
+      }
+    }
   } 
   void rsort(){
-    
+    if(internal_size > 1 && !destroyed){
+      for(size_t i=0; i<internal_size; i++){
+        for(size_t j=i+1; j<internal_size; j++){
+          if(at(j) > at(i)){
+            Z temp = at(i);
+            at(i) = at(j);
+            at(j) = temp;
+          }
+        }
+      }
+    }
   }
   void del(){
     DllNode * current = head->next;
@@ -243,6 +263,9 @@ int main(){
   a.push_back(0);
   a.back() = 12;
   a.reverse();
+  a.reverse();
+  a.print();
+  a.rsort();
   a.print();
   a.rprint();
   Dll<int> b(a);
