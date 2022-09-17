@@ -196,6 +196,7 @@ int main(){
   //c.print();
   //c.derivative().print();
   Polynomial d("x^2 + 4x - 2 + x^-2");
+  d.derivative().print();
   d.print();
   return 0;
 }
