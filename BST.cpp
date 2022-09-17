@@ -26,12 +26,14 @@ class BST{
       }else{
         traverse_insert(node->left, data);
       }
-    }else{
+    }else if(data > node->data){
       if(node->right == nullptr){
         node->right = create_node(data);
       }else{
         traverse_insert(node->right, data);
       }
+    }else{
+      return;
     }
   }
   void traverse_print_inorder(BSTNode * node){
@@ -62,6 +64,12 @@ class BST{
       delete node;
     }
   }
+  BSTNode* traverse_min(BSTNode * node){
+    while(node->left != nullptr){
+      node = node->left;
+    }
+    return node;
+  }
   public:
   BST(): tree(nullptr), destroyed(false){
   }
@@ -73,7 +81,70 @@ class BST{
         traverse_insert(tree, data);
       }
     }
-  } 
+  }
+  void remove(const Z& data){
+    BSTNode * parent = nullptr;
+    BSTNode * current = tree;
+
+    while(current != nullptr){
+      if(data < current->data){
+        parent = current;
+        current = current->left;
+      }else if(data > current->data){
+        parent = current;
+        current = current->right;
+      }else{
+        break;
+      }
+    }
+
+    if(current == nullptr){
+      return;
+    }
+
+    if(current->left == nullptr && current->right == nullptr){
+      if(current == tree){
+        tree = nullptr;
+        delete current;
+      }else{
+        if(parent->left == current){
+          parent->left = nullptr;
+        }else{
+          parent->right = nullptr;
+        }
+        delete current;
+      }
+    }else if(current->left != nullptr && current->right == nullptr){
+      if(current == tree){
+        tree = current->left;
+        delete current;
+      }else{
+        if(parent->left == current){
+          parent->left = current->left;
+        }else{
+          parent->right = current->left;
+        }
+        delete current;
+      }
+    }else if(current->left == nullptr && current->right != nullptr){
+      if(current == tree){
+        tree = current->right;
+        delete current;
+      }else{
+        if(parent->left == current){
+          parent->left = current->right;
+        }else{
+          parent->right = current->right;
+        }
+        delete current;
+      }
+    }else{
+      BSTNode * temp = traverse_min(current->right);
+      Z temp_data = temp->data;
+      remove(temp_data);
+      current->data = temp_data;
+    }
+  }
   void print_inorder(){
     if(!destroyed){
       traverse_print_inorder(tree);
@@ -109,13 +180,15 @@ int main(){
   tree.insert(4);
   tree.insert(2);
   tree.insert(6);
-  tree.insert(3);
+  //tree.insert(3);
   /*tree.insert(1);
   tree.insert(5);
   tree.insert(8);
   tree.insert(7);*/
   tree.print_inorder();
-  tree.print_preorder();
-  tree.print_postorder();
+  //tree.print_preorder();
+  //tree.print_postorder();
+  tree.remove(2);
+  tree.print_inorder();
   return 0;
 }
