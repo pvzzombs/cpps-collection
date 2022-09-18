@@ -145,6 +145,19 @@ class BST{
       current->data = temp_data;
     }
   }
+  BSTNode* search(const Z& data){
+    BSTNode * current = tree;
+    while(current != nullptr){
+      if(data < current->data){
+        current = current->left;
+      }else if(data > current->data){
+        current = current->right;
+      }else{
+        return current;
+      }
+    }
+    return nullptr;
+  }
   void print_inorder(){
     if(!destroyed){
       traverse_print_inorder(tree);
@@ -180,7 +193,7 @@ int main(){
   tree.insert(4);
   tree.insert(2);
   tree.insert(6);
-  //tree.insert(3);
+  tree.insert(3);
   /*tree.insert(1);
   tree.insert(5);
   tree.insert(8);
@@ -188,7 +201,8 @@ int main(){
   tree.print_inorder();
   //tree.print_preorder();
   //tree.print_postorder();
-  tree.remove(2);
+  //tree.remove(2);
+  std::cout << tree.search(6) << std::endl;
   tree.print_inorder();
   return 0;
 }
