@@ -147,7 +147,6 @@ class Dll{
     return *this;
   }
   bool operator==(const Dll &rhs){
-    std::cout << "Im called" << std::endl;
     if(!destroyed){
       if(size_ != rhs.size_){
         return false;
