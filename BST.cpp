@@ -12,7 +12,7 @@ class BST{
       right = nullptr;
     }
   };
-  BSTNode * tree;
+  BSTNode * root;
   bool destroyed;
   BSTNode * create_node(const Z& data){
     BSTNode * temp = new BSTNode;
@@ -71,20 +71,20 @@ class BST{
     return node;
   }
   public:
-  BST(): tree(nullptr), destroyed(false){
+  BST(): root(nullptr), destroyed(false){
   }
   void insert(const Z& data){
     if(!destroyed){
-      if(tree == nullptr){
-        tree = create_node(data);
+      if(root == nullptr){
+        root = create_node(data);
       }else{
-        traverse_insert(tree, data);
+        traverse_insert(root, data);
       }
     }
   }
   void remove(const Z& data){
     BSTNode * parent = nullptr;
-    BSTNode * current = tree;
+    BSTNode * current = root;
 
     while(current != nullptr){
       if(data < current->data){
@@ -103,8 +103,8 @@ class BST{
     }
 
     if(current->left == nullptr && current->right == nullptr){
-      if(current == tree){
-        tree = nullptr;
+      if(current == root){
+        root = nullptr;
         delete current;
       }else{
         if(parent->left == current){
@@ -115,8 +115,8 @@ class BST{
         delete current;
       }
     }else if(current->left != nullptr && current->right == nullptr){
-      if(current == tree){
-        tree = current->left;
+      if(current == root){
+        root = current->left;
         delete current;
       }else{
         if(parent->left == current){
@@ -127,8 +127,8 @@ class BST{
         delete current;
       }
     }else if(current->left == nullptr && current->right != nullptr){
-      if(current == tree){
-        tree = current->right;
+      if(current == root){
+        root = current->right;
         delete current;
       }else{
         if(parent->left == current){
@@ -146,7 +146,7 @@ class BST{
     }
   }
   BSTNode* search(const Z& data){
-    BSTNode * current = tree;
+    BSTNode * current = root;
     while(current != nullptr){
       if(data < current->data){
         current = current->left;
@@ -160,26 +160,26 @@ class BST{
   }
   void print_inorder(){
     if(!destroyed){
-      traverse_print_inorder(tree);
+      traverse_print_inorder(root);
       std::cout << std::endl;
     }
   }
   void print_preorder(){
     if(!destroyed){
-      traverse_print_preorder(tree);
+      traverse_print_preorder(root);
       std::cout << std::endl;
     }
   }
   void print_postorder(){
     if(!destroyed){
-      traverse_print_postorder(tree);
+      traverse_print_postorder(root);
       std::cout << std::endl;
     }
   }
   void destroy(){
     if(!destroyed){
-      traverse_destroy(tree);
-      tree = nullptr;
+      traverse_destroy(root);
+      root = nullptr;
       destroyed = true;
     }
   }
@@ -189,20 +189,23 @@ class BST{
 };
 
 int main(){
-  BST<int> tree;
-  tree.insert(4);
-  tree.insert(2);
-  tree.insert(6);
-  tree.insert(3);
-  /*tree.insert(1);
-  tree.insert(5);
-  tree.insert(8);
-  tree.insert(7);*/
-  tree.print_inorder();
-  //tree.print_preorder();
-  //tree.print_postorder();
-  //tree.remove(2);
-  std::cout << tree.search(6) << std::endl;
-  tree.print_inorder();
+  BST<int> a;
+  a.insert(4);
+  a.insert(2);
+  a.insert(6);
+  a.insert(3);
+  /*a.insert(1);
+  a.insert(5);
+  a.insert(8);
+  a.insert(7);*/
+  a.print_inorder();
+  //a.print_preorder();
+  //a.print_postorder();
+  a.remove(2);
+  a.remove(3);
+  a.remove(4);
+  a.remove(6);
+  std::cout << a.search(6) << std::endl;
+  a.print_inorder();
   return 0;
 }
