@@ -59,6 +59,29 @@ class Dll{
     std::swap(destroyed, tmp.destroyed);
     return *this;
   }
+  bool operator==(const Dll &rhs){
+    if(!destroyed){
+      if(internal_size != rhs.internal_size){
+        return false;
+      }
+      if(internal_size > 0){
+        DllNode * lhs_ = head->next;
+        DllNode * rhs_ = rhs.head->next;
+        while(lhs_ != tail){
+          if(lhs_->data != rhs_->data){
+            return false;
+          }
+          lhs_ = lhs_->next;
+          rhs_ = rhs_->next;
+        }
+      }
+      return true;
+    }
+    return false;
+  }
+  bool operator!=(const Dll &rhs){
+    return !((*this) == rhs);
+  }
   void push_back(Z m){
     if(!destroyed){
       DllNode * n = new DllNode;
@@ -255,32 +278,14 @@ class Dll{
 
 int main(){
   Dll<int> a;
+  Dll<int> b;
   a.push_back(10);
-  a.push_back(4);
-  a.push_back(3);
-  a.push_back(5);
-  a.push_back(2);
-  a.push_back(0);
-  a.back() = 12;
-  a.reverse();
-  a.reverse();
-  a.print();
-  a.rsort();
-  a.print();
-  a.rprint();
-  Dll<int> b(a);
-  b.rprint();
-  b.push_front(1);
-  b.push_front(7);
-  b.print();
-  //b.rprint();
-  /*for(Dll::Iterator i=a.end()-1; i!=a.begin(); --i){
-    std::cerr << "Hello " << std::endl;
-    std::cout << "Data: " << *i << std::endl;
-  }*/
-  //a.remove(b);
-  //a.sort(b, c);
-  //a.rsort();
-  std::cout << b.size() << std::endl;
+  /*a.push_back(4);
+  a.push_back(3);*/
+  b.push_back(10);
+  /*b.push_back(4);
+  b.push_back(3);*/
+
+  std::cout << (a == b) << std::endl;
   return 0;
 }
