@@ -1,0 +1,96 @@
+#include <iostream>
+
+template <typename Z>
+class Stack{
+  Z * arr;
+  size_t ptr;
+  size_t alloc_size;
+  size_t internal_size;
+  bool destroyed;
+  void resize(const size_t& num){
+    if(arr == nullptr){
+      arr = new Z[num];
+      alloc_size = num;
+    }else{
+      Z * temp = arr;
+      arr = new Z[num];
+      for(size_t i=0; i<alloc_size; i++){
+        arr[i] = temp[i];
+      }
+      alloc_size = num;
+      delete [] temp;
+    }
+  }
+public:
+  Stack(): arr(nullptr), ptr(0), alloc_size(0), internal_size(0), destroyed(false){
+  }
+  Stack(const size_t & num): Stack(){
+    resize(num);
+  }
+  void push(const Z& data){
+    if(!destroyed){
+      if(alloc_size == 0){
+        resize(1);
+      }
+      arr[ptr] = data;
+      ++ptr;
+      ++internal_size;
+      if(ptr == alloc_size){
+        resize(alloc_size * 2);
+        //std::cout << "Alloc -- " << alloc_size << std::endl;
+      }
+    }
+  }
+  void pop(){
+    if(!destroyed){
+      if(internal_size > 0){
+        --ptr;
+        --internal_size;
+      }
+    }
+  }
+  bool empty(){
+    return internal_size == 0;
+  }
+  size_t size(){
+    return internal_size;
+  }
+  Z& top(){
+    return arr[ptr-1];
+  }
+  void print(){
+    if(!destroyed){
+      std::cout << "Allocation size = " << alloc_size << std::endl;
+      std::cout << "Pointer to empty space = " << ptr << std::endl;
+      std::cout << "Internal size = " << internal_size << std::endl;
+      for(size_t i=0; i<internal_size; i++){
+        std::cout << arr[i] << " ";
+      }
+      std::cout << std::endl;
+    }
+  }
+  void destroy(){
+    if(!destroyed){
+      delete [] arr;
+      arr = nullptr;
+      ptr = 0;
+      alloc_size = 0;
+      internal_size = 0;
+      destroyed = true;
+    }
+  }
+  ~Stack(){
+    destroy();
+  }
+};
+
+int main(){
+  Stack<int> a;
+  //a.push(10);
+  //a.push(20);
+  //std::cout << a.top() << std::endl;
+  std::cout << a.size() << std::endl;
+  std::cout << a.empty() << std::endl;
+  a.print();
+  return 0;
+}
