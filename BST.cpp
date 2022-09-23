@@ -36,6 +36,16 @@ class BST{
       return;
     }
   }
+  void traverse_copy(BSTNode * node, BSTNode * rhs_node){
+    if(rhs_node->left != nullptr){
+      node->left = create_node(rhs_node->left->data);
+      traverse_copy(node->left, rhs_node->left);
+    }
+    if(rhs_node->right != nullptr){
+      node->right = create_node(rhs_node->right->data);
+      traverse_copy(node->right, rhs_node->right);
+    }
+  }
   void traverse_print_inorder(BSTNode * node){
     if(node != nullptr){
       traverse_print_inorder(node->left);
@@ -72,6 +82,20 @@ class BST{
   }
   public:
   BST(): root(nullptr), destroyed(false){
+  }
+  BST(const BST &rhs): BST(){
+    if(!rhs.destroyed){
+      if(rhs.root != nullptr){
+        root = create_node(rhs.root->data);
+        traverse_copy(root, rhs.root);
+      }
+    }
+  }
+  BST& operator=(const BST &rhs){
+    BST tmp(rhs);
+    std::swap(root, tmp.root);
+    std::swap(destroyed, tmp.destroyed);
+    return *this;
   }
   void insert(const Z& data){
     if(!destroyed){
@@ -194,6 +218,8 @@ int main(){
   a.insert(2);
   a.insert(6);
   a.insert(3);
+  BST<int> b;
+  b = a;
   /*a.insert(1);
   a.insert(5);
   a.insert(8);
@@ -201,11 +227,11 @@ int main(){
   a.print_inorder();
   //a.print_preorder();
   //a.print_postorder();
-  a.remove(2);
+  /*a.remove(2);
   a.remove(3);
   a.remove(4);
-  a.remove(6);
-  std::cout << a.search(6) << std::endl;
-  a.print_inorder();
+  a.remove(6);*/
+  //std::cout << a.search(6) << std::endl;
+  b.print_inorder();
   return 0;
 }
