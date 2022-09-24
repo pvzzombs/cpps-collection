@@ -1,4 +1,5 @@
 #include <iostream>
+#include <queue>
 #include <exception>
 
 template <typename Z>
@@ -65,6 +66,24 @@ class BST{
       traverse_print_postorder(node->left);
       traverse_print_postorder(node->right);
       std::cout << node->data << " ";
+    }
+  }
+  void traverse_print_breadth(BSTNode * node){
+    std::queue<BSTNode*> q;
+    q.push(node);
+    while(!q.empty()){
+      size_t cs = q.size();
+      for(size_t i=0; i<cs; i++){
+        if(q.front() != nullptr){
+          std::cout << q.front()->data << " ";
+          q.push(q.front()->left);
+          q.push(q.front()->right);
+        }else{
+          std::cout << "<NIL> ";
+        }
+        q.pop();
+      }
+      std::cout << std::endl;
     }
   }
   void traverse_destroy(BSTNode * node){
@@ -200,6 +219,11 @@ class BST{
       std::cout << std::endl;
     }
   }
+  void print_breadth(){
+    if(!destroyed){
+      traverse_print_breadth(root);
+    }
+  }
   void destroy(){
     if(!destroyed){
       traverse_destroy(root);
@@ -224,7 +248,8 @@ int main(){
   a.insert(5);
   a.insert(8);
   a.insert(7);*/
-  a.print_inorder();
+  //a.print_inorder();
+  a.print_breadth();
   //a.print_preorder();
   //a.print_postorder();
   /*a.remove(2);
