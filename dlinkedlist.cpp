@@ -25,7 +25,7 @@ class Dll{
     friend class Dll;
     DllNode * ip;
     bool is_begin, is_end;
-    Iterator operator+(size_t i){
+    Iterator operator+(size_t i) const {
       Iterator tmp = *this;
       for(size_t j=0; j<i; j++){
         if(ip != nullptr){
@@ -34,7 +34,7 @@ class Dll{
       }
       return tmp;
     }
-    Iterator operator-(size_t i){
+    Iterator operator-(size_t i) const {
       Iterator tmp = *this;
       for(size_t j=0; j<i; j++){
         if(ip != nullptr){
@@ -69,21 +69,21 @@ class Dll{
       --(*this);
       return tmp;
     }
-    Z& operator*(){
+    Z& operator*() const {
       if(ip != nullptr){
         return ip->x;
       }
       DllError err;
       throw err;
     }
-    bool operator!=(const Iterator& rhs){
+    bool operator!=(const Iterator& rhs) const {
       if((is_begin && rhs.is_end) ||
           (is_end && rhs.is_begin)){
         return ip != nullptr;
       }
       return ip != rhs.ip;
     }
-    bool operator==(const Iterator& rhs){
+    bool operator==(const Iterator& rhs) const {
       return ip == rhs.ip;
     }
   };
@@ -96,7 +96,7 @@ class Dll{
       }
     }
   }
-  Iterator begin(){
+  Iterator begin() const {
     Iterator tmp;
     if(head != nullptr && !destroyed){
       tmp.ip = head;
@@ -104,7 +104,7 @@ class Dll{
     }
     return tmp;
   }
-  Iterator end(){
+  Iterator end() const {
     Iterator tmp;
     DllNode * current = head;
     if(current != nullptr && !destroyed){
@@ -146,7 +146,7 @@ class Dll{
     std::swap(destroyed, tmp.destroyed);
     return *this;
   }
-  bool operator==(const Dll &rhs){
+  bool operator==(const Dll &rhs) const {
     if(!destroyed){
       if(size_ != rhs.size_){
         return false;
@@ -166,7 +166,7 @@ class Dll{
     }
     return false;
   }
-  bool operator!=(const Dll &rhs){
+  bool operator!=(const Dll &rhs) const {
     return !((*this) == rhs);
   }
   void push_back(Z data){
@@ -369,7 +369,7 @@ class Dll{
   inline void erase(Iterator i){
     remove(i);
   }
-  void print(){
+  void print() const {
     DllNode * current = head;
     if(current != nullptr && !destroyed){
       while(true){
@@ -384,7 +384,7 @@ class Dll{
       std::cout << std::endl;
     }
   }
-  void rprint(){
+  void rprint() const {
     DllNode * current = head;
     if(current != nullptr && !destroyed){
       while(current->next != nullptr){
@@ -402,7 +402,7 @@ class Dll{
       std::cout << std::endl;
     }
   }
-  inline Z& at(int index){
+  inline Z& at(int index) const {
     DllNode * current = head;
     int i=0;
     if(current != nullptr && !destroyed){
@@ -423,7 +423,7 @@ class Dll{
     }
     return current->x;
   }
-  inline Z& at(Iterator i){
+  inline Z& at(Iterator i) const {
     DllNode * current = i.ip;
     if(current != nullptr && !destroyed){
       return current->x;
@@ -431,7 +431,7 @@ class Dll{
     DllError err;
     throw err;
   }
-  inline Z& front(){
+  inline Z& front() const {
     DllNode * current = head;
     if(current != nullptr && !destroyed){
       return current->x;
@@ -439,7 +439,7 @@ class Dll{
     DllError err;
     throw err;
   }
-  inline Z& back(){
+  inline Z& back() const {
     DllNode * current = head;
     if(current != nullptr && !destroyed){
       while(current->next != nullptr){
@@ -450,10 +450,10 @@ class Dll{
     DllError err;
     throw err;
   }
-  inline int size(){
+  inline int size() const {
     return size_;
   }
-  inline bool empty(){
+  inline bool empty() const {
     return size_ == 0;
   }
   void reverse(){

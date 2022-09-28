@@ -59,7 +59,7 @@ class Dll{
     std::swap(destroyed, tmp.destroyed);
     return *this;
   }
-  bool operator==(const Dll &rhs){
+  bool operator==(const Dll &rhs) const {
     if(!destroyed){
       if(internal_size != rhs.internal_size){
         return false;
@@ -79,7 +79,7 @@ class Dll{
     }
     return false;
   }
-  bool operator!=(const Dll &rhs){
+  bool operator!=(const Dll &rhs) const {
     return !((*this) == rhs);
   }
   void push_back(Z m){
@@ -156,7 +156,7 @@ class Dll{
   inline void erase(size_t index){
     remove(index);
   } 
-  void print(){
+  void print() const {
     if(!destroyed){
       DllNode * current = head->next;
       while(current != tail){
@@ -166,7 +166,7 @@ class Dll{
       std::cout << std::endl;
     }
   }
-  void rprint(){
+  void rprint() const {
     if(!destroyed){
       DllNode * current = tail->prev;
       while(current != head){
@@ -176,7 +176,7 @@ class Dll{
       std::cout << std::endl;
     }
   }
-  inline Z& at(size_t index){
+  inline Z& at(size_t index) const {
     if(internal_size > 0 && index < internal_size && !destroyed){
       DllNode * current = head->next;
       size_t i=0;
@@ -188,22 +188,22 @@ class Dll{
     }
     DllError err; throw err;
   } 
-  inline Z& front(){
+  inline Z& front() const {
     if(internal_size > 0 && !destroyed){
       return head->next->data;
     }
     DllError err; throw err;
   }
-  inline Z& back(){
+  inline Z& back() const {
     if(internal_size > 0 && !destroyed){
       return tail->prev->data;
     }
     DllError err; throw err;
   }
-  inline int size(){
+  inline int size() const {
     return internal_size;
   }
-  inline bool empty(){
+  inline bool empty() const {
     return internal_size == 0;
   }
   void reverse(){
