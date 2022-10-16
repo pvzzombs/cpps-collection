@@ -61,7 +61,6 @@ inline void eat(){
   if(ptr < program.size()){
     ++ptr;
   }else{
-    std::cerr << "Error: EOF" << std::endl;
     err_msg = "EOF";
     err_msg += ", inside eat()";
     syntax_err.add_cause(err_msg);
