@@ -26,9 +26,10 @@ void Merge(std::vector<int> &arr, int beg, int mid, int end){
     out.at(k) = arr.at(mid+1+j);
     k++; j++;
   }
-  
+ 
+  k=0;
   for(int q=beg; q<=end; q++){
-    arr.at(q) = out.at(q);
+    arr.at(q) = out.at(k++);
   }
 }
 
@@ -44,7 +45,7 @@ void MergeSort(std::vector<int> &arr, int beg, int end){
 }
 
 int main(int argc, char *argv[]) {
-  std::vector<int> a= {8,7,6};
+  std::vector<int> a= {8,6,7,5,4};
   MergeSort(a,0,a.size()-1);
   for(int q : a){
     std::cout << q << std::endl;
