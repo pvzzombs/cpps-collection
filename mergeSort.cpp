@@ -45,7 +45,7 @@ void MergeSort(std::vector<int> &arr, int beg, int end){
 }
 
 int main(int argc, char *argv[]) {
-  std::vector<int> a= {8,6,7,5,4};
+  std::vector<int> a= {8,6,7,1,2,3};
   MergeSort(a,0,a.size()-1);
   for(int q : a){
     std::cout << q << std::endl;
