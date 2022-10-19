@@ -101,7 +101,9 @@ public:
   }
   void destroy(){
     if(!destroyed){
-      delete [] arr;
+      if(alloc_size){
+        delete [] arr;
+      }
       arr = nullptr;
       alloc_size = 0;
       internal_size = 0;

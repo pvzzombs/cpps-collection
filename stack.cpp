@@ -83,7 +83,9 @@ public:
   }
   void destroy(){
     if(!destroyed){
-      delete [] arr;
+      if(alloc_size){
+        delete [] arr;
+      }
       arr = nullptr;
       //ptr = 0;
       alloc_size = 0;
