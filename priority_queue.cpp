@@ -153,6 +153,8 @@ int main(){
   //std::cout << a.size() << std::endl;
   //std::cout << a.empty() << std::endl;
   a.print();
+  a.pop();
+  a.print();
   //b.print();
   return 0;
 }
