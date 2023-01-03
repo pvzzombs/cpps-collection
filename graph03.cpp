@@ -93,20 +93,20 @@ class UndirectedGraph{
       pushNoDuplicate(nodes, temp);
     }
   }
-  void primMST(){
+  void primMST(int v=0){
     std::vector<int> parent(vertices.size());
     std::vector<bool> visited(vertices.size());
-    parent.at(0) = -1;
+    parent.at(v) = -1;
     for(int i=0; i<visited.size(); i++){
       visited.at(i) = false;
     }
-    visited.at(0) = true;
+    visited.at(v) = true;
     
     std::vector<VertexNode> nodes;
     
-    for(auto e: vertices.at(0).edges){
+    for(auto e: vertices.at(v).edges){
       VertexNode temp;
-      temp.src = 0;
+      temp.src = v;
       temp.dest = e.dest;
       temp.weight = e.weight;
       nodes.push_back(temp);
@@ -131,7 +131,7 @@ class UndirectedGraph{
       }
     }
     
-    for(int i=1; i<parent.size(); i++){
+    for(int i=0; i<parent.size(); i++){
       std::cout << i << " -> " << parent.at(i) << std::endl;
     }
   }
@@ -228,10 +228,14 @@ int main(){
   a.add_vertex("2");
   a.add_vertex("3");
   a.add_vertex("4");
+  
+  /*a.add_vertex("5");
+  a.add_vertex("6");*/
+  
   a.add_edge(0, 1, 1);
   a.add_edge(1, 4, 2);
   a.add_edge(0, 2, 4);
-  a.add_edge(2, 4, 3); //
+  a.add_edge(2, 4, 3); // Replace 3 with 0
   a.add_edge(0, 3, 10);
   a.add_edge(3, 4, 11);
   /*a.add_edge(0,1,2);
@@ -245,6 +249,20 @@ int main(){
   a.add_edge(1, 4);
   a.add_edge(2, 3);
   a.add_edge(4, 3);*/
+  
+  /*a.add_edge(0,1);
+  a.add_edge(0,2);
+  a.add_edge(1,3);
+  a.add_edge(1,4);
+  a.add_edge(2,5);
+  a.add_edge(2,6);*/
+  /*a.add_edge(0,1);
+  a.add_edge(1,2);
+  a.add_edge(0,3);
+  a.add_edge(0,4);
+  a.add_edge(1,5);
+  a.add_edge(1,6);*/
+  
   a.sort();
   a.print();
   a.primMST();
