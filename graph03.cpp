@@ -92,16 +92,15 @@ class UndirectedGraph{
       temp.weight = vertices.at(e.dest).edges.at(i).weight;
       pushNoDuplicate(nodes, temp);
     }
-    std::sort(nodes.begin(), nodes.end());
   }
   void primMST(){
     std::vector<int> parent(vertices.size());
-    std::vector<bool> MST(vertices.size());
+    std::vector<bool> visited(vertices.size());
     parent.at(0) = -1;
-    for(int i=0; i<MST.size(); i++){
-      MST.at(i) = false;
+    for(int i=0; i<visited.size(); i++){
+      visited.at(i) = false;
     }
-    MST.at(0) = true;
+    visited.at(0) = true;
     
     std::vector<VertexNode> nodes;
     
@@ -119,13 +118,13 @@ class UndirectedGraph{
         std::sort(nodes.begin(), nodes.end());
         cont = false;
         auto e = nodes.front();
-        if(MST.at(e.dest)){
+        if(visited.at(e.dest)){
           nodes.erase(nodes.begin());
           cont = true;
         }else{
           populateChildNodes(nodes, e);
           parent.at(e.dest) = e.src;
-          MST.at(e.dest) = true;
+          visited.at(e.dest) = true;
           nodes.erase(nodes.begin());
           cont = false;
         }
@@ -151,7 +150,6 @@ class UndirectedGraph{
       }
       
       for(int i=0; i<q.size(); i++){
-        //std::cout << q.at(i) << ", ";
         for(int j=i+1; j<q.size(); j++){
           if(q.at(i) == q.at(j)){
             std::cout << "Has a cycle" << std::endl;
@@ -166,11 +164,11 @@ class UndirectedGraph{
     
     std::cout << "Has no cycle" << std::endl;
   }
-  void BFS(){
+  void BFS(int v=0){
     std::vector<int> q;
     std::vector<int> visited;
     
-    q.push_back(0);
+    q.push_back(v);
     
     while(q.size()){
       auto e = q.front();
@@ -204,12 +202,12 @@ class UndirectedGraph{
       }
     }
   }
-  void DFS(){
+  void DFS(int v=0){
     std::vector<int> s;
     std::vector<int> visited;
     
-    s.push_back(0);
-    visited.push_back(0);
+    s.push_back(v);
+    visited.push_back(v);
     DFSBT(s, visited);
     s.pop_back();
     
@@ -230,27 +228,27 @@ int main(){
   a.add_vertex("2");
   a.add_vertex("3");
   a.add_vertex("4");
-  /*a.add_edge(0, 1, 1);
+  a.add_edge(0, 1, 1);
   a.add_edge(1, 4, 2);
   a.add_edge(0, 2, 4);
-  a.add_edge(2, 4, 3);
+  a.add_edge(2, 4, 3); //
   a.add_edge(0, 3, 10);
-  a.add_edge(3, 4, 11);*/
+  a.add_edge(3, 4, 11);
   /*a.add_edge(0,1,2);
   a.add_edge(0,2,1);
   a.add_edge(0,4,3);
   a.add_edge(1,3,1);
   a.add_edge(2,3,1);
   a.add_edge(4,3,3);*/
-  a.add_edge(0, 1);
+  /*a.add_edge(0, 1);
   a.add_edge(1, 2);
   a.add_edge(1, 4);
   a.add_edge(2, 3);
-  a.add_edge(4, 3);
+  a.add_edge(4, 3);*/
   a.sort();
   a.print();
-  //a.primMST();
-  //a.hasCycle();
+  a.primMST();
+  a.hasCycle();
   a.BFS();
   a.DFS();
   return 0;
