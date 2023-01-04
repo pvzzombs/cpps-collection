@@ -132,7 +132,9 @@ class UndirectedGraph{
     }
     
     for(int i=0; i<parent.size(); i++){
-      std::cout << i << " -> " << parent.at(i) << std::endl;
+      if(i != v){
+        std::cout << i << " -> " << parent.at(i) << std::endl;
+      }
     }
   }
   void hasCycle(){
@@ -144,14 +146,11 @@ class UndirectedGraph{
     while(q.size()){
       auto e = q.front();
       for(int i=0; i<vertices.at(e).edges.size(); i++){
-        if(std::find(visited.begin(), visited.end(), vertices.at(e).edges.at(i).dest) == visited.end()){
-          q.push_back(vertices.at(e).edges.at(i).dest);
-        }
-      }
-      
-      for(int i=0; i<q.size(); i++){
-        for(int j=i+1; j<q.size(); j++){
-          if(q.at(i) == q.at(j)){
+        auto d = vertices.at(e).edges.at(i).dest;
+        if(std::find(visited.begin(), visited.end(), d) == visited.end()){
+          if(std::find(q.begin(), q.end(), d) == q.end()){
+            q.push_back(d);
+          }else{
             std::cout << "Has a cycle" << std::endl;
             return;
           }
@@ -173,9 +172,9 @@ class UndirectedGraph{
     while(q.size()){
       auto e = q.front();
       for(int i=0; i<vertices.at(e).edges.size(); i++){
-        auto &d = vertices.at(e).edges.at(i).dest;
+        auto d = vertices.at(e).edges.at(i).dest;
         if(std::find(visited.begin(), visited.end(), d) == visited.end() && std::find(q.begin(), q.end(), d) == q.end()){
-          q.push_back(vertices.at(e).edges.at(i).dest);
+          q.push_back(d);
         }
       }
       
