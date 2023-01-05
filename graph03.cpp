@@ -21,13 +21,12 @@ class Vertex{
   std::vector<Edge> edges;
 };
 
-class VertexNode{
+class EdgeNode{
   public:
   int src;
   int dest;
   int weight;
-  int flag;
-  bool operator<(const VertexNode& rhs) const {
+  bool operator<(const EdgeNode& rhs) const {
     return weight < rhs.weight;
   }
 };
@@ -73,7 +72,7 @@ class UndirectedGraph{
       std::sort(vertices.at(i).edges.begin(), vertices.at(i).edges.end());
     }
   }
-  void pushNoDuplicate(std::vector<VertexNode> &arr, VertexNode &e){
+  void pushNoDuplicate(std::vector<EdgeNode> &arr, EdgeNode &e){
     for(int i=0; i<arr.size(); i++){
       if((arr.at(i).src == e.src &&
           arr.at(i).dest == e.dest) ||
@@ -84,9 +83,9 @@ class UndirectedGraph{
     }
     arr.push_back(e);
   }
-  void populateChildNodes(std::vector<VertexNode> &nodes, VertexNode &e){
+  void populateChildNodes(std::vector<EdgeNode> &nodes, EdgeNode &e){
     for(int i=0; i<vertices.at(e.dest).edges.size(); i++){
-      VertexNode temp;
+      EdgeNode temp;
       temp.src = e.dest;
       temp.dest = vertices.at(e.dest).edges.at(i).dest;
       temp.weight = vertices.at(e.dest).edges.at(i).weight;
@@ -102,10 +101,10 @@ class UndirectedGraph{
     }
     visited.at(v) = true;
     
-    std::vector<VertexNode> nodes;
+    std::vector<EdgeNode> nodes;
     
     for(auto e: vertices.at(v).edges){
-      VertexNode temp;
+      EdgeNode temp;
       temp.src = v;
       temp.dest = e.dest;
       temp.weight = e.weight;
