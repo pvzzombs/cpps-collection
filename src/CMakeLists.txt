@@ -5,10 +5,6 @@ project(cpps-collection-src)
 set(CMAKE_CXX_STANDARD 11)
 set(CMAKE_CXX_STANDARD_REQUIRED True)
 
-function(add_cpp_file PROBLEM_NAME CPP_FILE_NAME)
-  add_executable(${PROBLEM_NAME} ${CPP_FILE_NAME})
-endfunction()
-
 add_subdirectory(array)
 add_subdirectory(backTracking)
 add_subdirectory(binarySearch)
