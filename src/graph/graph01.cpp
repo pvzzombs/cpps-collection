@@ -1,5 +1,6 @@
-#include <vector>
 #include <iostream>
+#include <algorithm>
+#include <vector>
 
 class Edge{
   public:

@@ -1,0 +1,27 @@
+cmake_minimum_required(VERSION 3.5.0)
+
+project(cpps-collection-src)
+
+set(CMAKE_CXX_STANDARD 11)
+set(CMAKE_CXX_STANDARD_REQUIRED True)
+
+function(add_cpp_file PROBLEM_NAME CPP_FILE_NAME)
+  add_executable(${PROBLEM_NAME} ${CPP_FILE_NAME})
+endfunction()
+
+add_subdirectory(array)
+add_subdirectory(backTracking)
+add_subdirectory(binarySearch)
+add_subdirectory(binarySearchTree)
+add_subdirectory(combinatorics)
+add_subdirectory(cryptography)
+add_subdirectory(graph)
+add_subdirectory(linkedList)
+add_subdirectory(mathematics)
+add_subdirectory(parser)
+add_subdirectory(patterns)
+add_subdirectory(queue)
+add_subdirectory(selection)
+add_subdirectory(sorting)
+add_subdirectory(stack)
+add_subdirectory(subset)
