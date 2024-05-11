@@ -28,6 +28,7 @@ public:
 
 void lcsubsqc(std::string str1, std::string str2) {
   long r, c;
+  long rtemp, ctemp;
   long rlen, clen;
   long clim, rlim;
   long i, j;
@@ -63,14 +64,14 @@ void lcsubsqc(std::string str1, std::string str2) {
       for(long p = r; p <= rlim; p++) {
         if(str1.at(p) == str2.at(clim)) {
           stop = true;
-          // c = clim + 1;
-          // r = p + 1;
+          ctemp = clim + 1;
+          rtemp = p + 1;
           tempStr = str + str1.at(p);
           if(tempStr.size() > maxStr.size()) {
             maxStr = tempStr;
           }
-          if(r < str1.size() && c < str2.size()) {
-            q.push(start(p + 1, clim + 1, tempStr));
+          if(rtemp < str1.size() && ctemp < str2.size()) {
+            q.push(start(rtemp, ctemp, tempStr));
           }
           break;
         }
@@ -79,14 +80,14 @@ void lcsubsqc(std::string str1, std::string str2) {
       for(long p = c; p < clim; p++) {
         if(str2.at(p) == str1.at(rlim)) {
           stop = true;
-          // r = rlim + 1;
-          // c = p + 1;
+          rtemp = rlim + 1;
+          ctemp = p + 1;
           tempStr = str + str2.at(p);
           if(tempStr.size() > maxStr.size()) {
             maxStr = tempStr;
           }
-          if(r < str1.size() && c < str2.size()) {
-            q.push(start(rlim + 1, p + 1, tempStr));
+          if(rtemp < str1.size() && ctemp < str2.size()) {
+            q.push(start(rtemp, ctemp, tempStr));
           }
           break;
         }
@@ -107,7 +108,9 @@ int main() {
   std::string s2 = "abcdxaa";
   lcsubsqc(s1, s2);
   lcsubsqc(s2, s1);
-  // lcsubsqc("abcdxaab", "abcdabcdxaa");
-  // lcsubsqc("abcdabcdxaa", "abcdxaab");
+  lcsubsqc("abcdxaab", "abcdabcdxaa");
+  lcsubsqc("abcdabcdxaa", "abcdxaab");
+  lcsubsqc("abcbdab", "bdcab");
+  lcsubsqc("bdcab", "abcbdab");
   return 0;
 }
