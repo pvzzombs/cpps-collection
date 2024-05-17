@@ -13,6 +13,8 @@
 #include <string>
 #include <vector>
 #include <queue>
+#include <utility>
+#include <unordered_set>
 
 class start {
 public:
@@ -28,17 +30,20 @@ public:
 
 void lcsubsqc(std::string str1, std::string str2) {
   long r, c;
+  long oldr, oldc;
   long rtemp, ctemp;
   long rlen, clen;
   long clim, rlim;
   long i, j;
-  bool stop;
+  bool stopRow, stopCol;
   long count = 0;
   std::string maxStr = "";
-  std::string str, tempStr;
+  std::string temp, str, tempStr;
+  std::unordered_set<char> cs;
   std::queue<start> q;
 
   if(str1.size() && str2.size()) {
+    // us.insert("0,0");
     q.push(start(0, 0, ""));
   }
   while(q.size()) {
@@ -58,43 +63,57 @@ void lcsubsqc(std::string str1, std::string str2) {
     }
     clim = c + j;
     rlim = r + i;
+    stopRow = false;
+    stopCol = false;
+    oldr = -1;
+    oldc = -1;
+    cs.clear();
     while(rlim < str1.size() && clim < str2.size()) {
       // down
-      stop = false;
-      for(long p = r; p <= rlim; p++) {
-        if(str1.at(p) == str2.at(clim)) {
-          stop = true;
-          ctemp = clim + 1;
-          rtemp = p + 1;
-          tempStr = str + str1.at(p);
-          if(tempStr.size() > maxStr.size()) {
-            maxStr = tempStr;
+      if(!stopRow) {
+        for(long p = r; p <= rlim; p++) {
+          if(cs.count(str1.at(p)) == 0 && str1.at(p) == str2.at(clim)) {
+            // stopRow = true;
+            cs.insert(str1.at(p));
+            ctemp = clim + 1;
+            rtemp = p + 1;
+            tempStr = str + str1.at(p);
+            if(tempStr.size() > maxStr.size()) {
+              maxStr = tempStr;
+            }
+            if(rtemp < str1.size() && ctemp < str2.size() && oldr != rtemp && oldc != ctemp) {
+              oldr = rtemp;
+              oldc = ctemp;
+              q.push(start(rtemp, ctemp, tempStr));
+            }
+            break;
           }
-          if(rtemp < str1.size() && ctemp < str2.size()) {
-            q.push(start(rtemp, ctemp, tempStr));
-          }
-          break;
         }
       }
       // right
-      for(long p = c; p < clim; p++) {
-        if(str2.at(p) == str1.at(rlim)) {
-          stop = true;
-          rtemp = rlim + 1;
-          ctemp = p + 1;
-          tempStr = str + str2.at(p);
-          if(tempStr.size() > maxStr.size()) {
-            maxStr = tempStr;
+      if(!stopCol) {
+        for(long p = c; p <= clim; p++) {
+          if(cs.count(str2.at(p)) == 0 && str2.at(p) == str1.at(rlim)) {
+            // stopCol = true;
+            cs.insert(str2.at(p));
+            rtemp = rlim + 1;
+            ctemp = p + 1;
+            tempStr = str + str2.at(p);
+            if(tempStr.size() > maxStr.size()) {
+              maxStr = tempStr;
+            }
+            if(rtemp < str1.size() && ctemp < str2.size() && oldr != rtemp && oldc != ctemp) {
+              oldr = rtemp;
+              oldc = ctemp;
+              q.push(start(rtemp, ctemp, tempStr));
+            }
+            break;
           }
-          if(rtemp < str1.size() && ctemp < str2.size()) {
-            q.push(start(rtemp, ctemp, tempStr));
-          }
-          break;
         }
       }
-      if(stop) {
-        break;
-      }
+      // if(stopRow && stopCol) {
+      //   break;
+      // }
       clim++;
       rlim++;
     }
@@ -106,11 +125,17 @@ void lcsubsqc(std::string str1, std::string str2) {
 int main() {
   std::string s1 = "xaab";
   std::string s2 = "abcdxaa";
-  lcsubsqc(s1, s2);
-  lcsubsqc(s2, s1);
-  lcsubsqc("abcdxaab", "abcdabcdxaa");
-  lcsubsqc("abcdabcdxaa", "abcdxaab");
-  lcsubsqc("abcbdab", "bdcab");
-  lcsubsqc("bdcab", "abcbdab");
+  // lcsubsqc(s1, s2);
+  // lcsubsqc(s2, s1);
+  // lcsubsqc("abcdxaab", "abcdabcdxaa");
+  // lcsubsqc("abcdabcdxaa", "abcdxaab");
+  // lcsubsqc("abcbdab", "bdcab");
+  // lcsubsqc("bdcab", "abcbdab");
+  // lcsubsqc("ylqpejqbalahwr", "yrkzavgdmdgtqpg");
+  // lcsubsqc("yrkzavgdmdgtqpg", "ylqpejqbalahwr");
+  // lcsubsqc("aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa", "aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa");
+  // lcsubsqc("lmrejgzsbqpkdonytkbknstsxifofmrktcpq", "hklcrebcjipetgnmlqvijovmlgripwratarmt");
+  // lcsubsqc("hklcrebcjipetgnmlqvijovmlgripwratarmt", "lmrejgzsbqpkdonytkbknstsxifofmrktcpq");
+  lcsubsqc("zelohidwdcxilkvytazgfozonwrkbalcpizgtmzuhkbsfefshmtctuvc", "rwjmzoncvihmlmvgdujopwrajuxmjefonivyvkncnwnkjaxkritkporsj");
   return 0;
 }
