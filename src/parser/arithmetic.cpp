@@ -1,6 +1,23 @@
 #include <iostream>
 #include <string>
 #include <exception>
+#include <cmath>
+
+#ifdef _WIN32
+#include <io.h>
+#include <fcntl.h>
+void setToU16Text() {
+  _setmode(_fileno(stdout), _O_U16TEXT);
+}
+void setToNormalText() {
+  _setmode(_fileno(stdout), _O_TEXT);
+}
+#else
+void setToU16Text() {
+}
+void setToNormalText() {
+}
+#endif
 
 class SyntaxError: public std::exception{
   public:
@@ -180,7 +197,7 @@ ASTNode * expr() {
   return left;
 }
 
-void printASTNode(ASTNode * t, std::string indent){
+void printASTNode(ASTNode * t, std::string indent) {
   if(t != nullptr){
     std::cout << indent;
     switch(t->type){
@@ -188,10 +205,10 @@ void printASTNode(ASTNode * t, std::string indent){
         std::cout << "[Operator] ";
         break;
       case NUMBER:
-        std::cout << "[Number] ";
+        std::cout << "[ Number ] ";
         break;
       case SIGN:
-        std::cout << "[Sign] ";
+        std::cout << "[  Sign  ] ";
         break;
     }
     std::cout << t->value << std::endl;
@@ -201,7 +218,51 @@ void printASTNode(ASTNode * t, std::string indent){
   }
 }
 
-void deleteASTNode(ASTNode * t){
+void prettyPrintASTNode(ASTNode * t, std::wstring indent, int direction) {
+  if(t != nullptr){
+    setToU16Text();
+    std::wcout << indent;
+    setToNormalText();
+    switch(t->type){
+      case OPERATOR:
+        std::cout << "[Operator] ";
+        break;
+      case NUMBER:
+        std::cout << "[ Number ] ";
+        break;
+      case SIGN:
+        std::cout << "[  Sign  ] ";
+        break;
+    }
+    if (t->right != nullptr && direction == 0) {
+      indent = indent.substr(0, indent.size() - 2) + L"\u2502 ";
+    } else {
+      if (indent != L"") {
+        indent = indent.substr(0, indent.size() - 2) + L"  ";
+      }
+    }
+    setToNormalText();
+    std::cout << t->value << std::endl;
+    std::wstring tempIndent = indent;
+    int dir = 0;
+    if (t->left != nullptr) {
+      if (t->right != nullptr) {
+        indent += L"\u251c\u2500";
+      } else {
+        indent += L"\u2514\u2500";
+        dir = 1;
+      }
+    }
+    prettyPrintASTNode(t->left, indent, dir);
+    indent = tempIndent;
+    if (t->right != nullptr) {
+      indent += L"\u2514\u2500";
+    }
+    prettyPrintASTNode(t->right, indent, 1);
+  }
+}
+
+void deleteASTNode(ASTNode * t) {
   if(t != nullptr){
     deleteASTNode(t->left);
     deleteASTNode(t->right);
@@ -209,11 +270,48 @@ void deleteASTNode(ASTNode * t){
   }
 }
 
+int generateSolution(ASTNode * t) {
+  if (t->type == NUMBER) {
+    return std::stoi(t->value);
+  }
+  if (t->type == SIGN) {
+    return generateSolution(t->left);
+  }
+  if (t->type == OPERATOR) {
+    int left = generateSolution(t->left);
+    int right = generateSolution(t->right);
+    switch (t->value.at(0)) {
+      case '+':
+        return left + right;
+      break;
+      case '-':
+        return left - right;
+      break;
+      case '*':
+        return left * right;
+      break;
+      case '/':
+        return left / right;
+      break;
+      case '^':
+        return std::pow(left, right);
+      break;
+    }
+  }
+  throw 1;
+}
+
 int main(int argc, char *argv[]) {
   // program = "2*3+(2^2)^3";
-  program = "-(1*-1)";
+  // program = "-(1*-1)";
+  // program = "2*3*4^5^9*6*8";
+  program = "2^4";
   ASTNode* result = expr();
-  printASTNode(result, "");
+  // printASTNode(result, "");
+  prettyPrintASTNode(result, L"", 1);
+  setToNormalText();
+  std::cout << "Answer: ";
+  std::cout << generateSolution(result) << std::endl;
   deleteASTNode(result);
   return 0;
 }
