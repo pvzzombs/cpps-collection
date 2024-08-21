@@ -6,8 +6,10 @@
 #ifdef _WIN32
 #include <io.h>
 #include <fcntl.h>
+// #include <windows.h>
 void setToU16Text() {
   _setmode(_fileno(stdout), _O_U16TEXT);
+  // SetConsoleOutputCP(CP_UTF8);
 }
 void setToNormalText() {
   _setmode(_fileno(stdout), _O_TEXT);
