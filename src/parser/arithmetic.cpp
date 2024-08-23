@@ -68,7 +68,12 @@ inline void match(char a){
   if(peek() == a){
     ++ptr;
   }else{
+    std::string c = "";
+    c += peek();
+    std::string cause = peek() == 0 ? "EOF" : c;
     err_msg = "Unexpected token ";
+    err_msg += cause;
+    err_msg += ", expecting ";
     err_msg += a;
     err_msg += " at column ";
     err_msg += std::to_string(ptr + 1);
@@ -277,7 +282,7 @@ int generateSolution(ASTNode * t) {
     return std::stoi(t->value);
   }
   if (t->type == SIGN) {
-    return generateSolution(t->left);
+    return -1 * generateSolution(t->left);
   }
   if (t->type == OPERATOR) {
     int left = generateSolution(t->left);
@@ -307,7 +312,7 @@ int main(int argc, char *argv[]) {
   // program = "2*3+(2^2)^3";
   // program = "-(1*-1)";
   // program = "2*3*4^5^9*6*8";
-  program = "2^4";
+  program = "-(1)";
   ASTNode* result = expr();
   // printASTNode(result, "");
   prettyPrintASTNode(result, L"", 1);
