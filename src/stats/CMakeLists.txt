@@ -11,3 +11,4 @@ function(add_cpp_file PROBLEM_NAME CPP_FILE_NAME)
 endfunction()
 
 add_cpp_file(neuralNetwork3Layer neuralNetwork3Layer.cpp)
+add_cpp_file(neuralNetwork3Layer2 neuralNetwork3Layer2.cpp)
