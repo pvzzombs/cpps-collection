@@ -41,6 +41,7 @@ int main() {
   outputDataSet.at(3) << 0;
 
   for(size_t i = 0; i < 10000; i++) {
+    double errEpoch = 0;
     for (size_t d = 0; d < 4; d++) {
       Eigen::MatrixXd Z_1 = inputDataSet.at(d) * W1 + B1;
       Eigen::MatrixXd G_1 = sigmoid(Z_1);
@@ -59,9 +60,12 @@ int main() {
       W2 -= learningRate * delCostdelW2;
       B2 -= learningRate * delCostdelB2;
 
-      if (i % 100 == 0) {
-        std::cout << "Iteration: " << i << " Loss: " << delCostdelY_hat.squaredNorm() << std::endl;
-      }
+      Eigen::MatrixXd cost = Y_hat - outputDataSet.at(d);
+      errEpoch += (cost(0, 0) * cost(0, 0));
+    }
+    errEpoch /= 4;
+    if (i % 100 == 0) {
+      std::cout << "Iteration: " << i << " Loss: " << errEpoch << std::endl;
     }
   }
   {
