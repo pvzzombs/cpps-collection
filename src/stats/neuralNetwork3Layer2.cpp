@@ -49,8 +49,8 @@ int main() {
 
       Eigen::MatrixXd delCostdelY_hat = (2 * (Y_hat - outputDataSet.at(d)).array()).matrix();
       Eigen::MatrixXd delCostdelZ2 = (delCostdelY_hat.array() * (Y_hat.array() * (1 - Y_hat.array()))).matrix();
-      Eigen::MatrixXd delCostdelW2 = G_1.transpose() * delCostdelZ2;
       Eigen::MatrixXd delCostdelB2 = delCostdelZ2;
+      Eigen::MatrixXd delCostdelW2 = G_1.transpose() * delCostdelZ2;
       Eigen::MatrixXd delCostdelB1 = ((delCostdelZ2 * W2.transpose()).array() * G_1.array() * (1 - G_1.array())).matrix();
       Eigen::MatrixXd delCostdelW1 = inputDataSet.at(d).transpose() * delCostdelB1;
 
