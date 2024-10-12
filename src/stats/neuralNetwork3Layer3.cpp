@@ -4,15 +4,7 @@
 #include <Eigen/Dense>
 
 Eigen::MatrixXd sigmoid(const Eigen::MatrixXd & m) {
-  Eigen::MatrixXd output(m.rows(), m.cols());
-  const double E = std::exp(1);
-  // std::cout << E << std::endl;
-  for (size_t i = 0; i < m.rows(); i++) {
-    for (size_t j = 0; j < m.cols(); j++) {
-      output(i, j) = 1 / (1 + std::pow(E, -1 * m(i, j)));
-    }
-  }
-  return output;
+  return (1.0 / (1.0 + (-m.array()).exp())).matrix();
 }
 
 int main() {
