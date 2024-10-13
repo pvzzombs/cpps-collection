@@ -4,50 +4,64 @@
 #include <Eigen/Dense>
 
 int main() {
-  int fnum = 2;
-  int labelCount = 2;
-  Eigen::MatrixXi F(fnum, 5);
-  Eigen::MatrixXi Label(1, 5);
-  F << 1, 1, 0, 0, 1,
-  0, 1, 0, 1, 0;
-  Label << 1, 1, 0, 0, 1;
-  Eigen::MatrixXi LabelTotal = Eigen::MatrixXi::Zero(labelCount, 1);
-  Eigen::MatrixXd LabelP(labelCount, 1);
+  const int fnum = 2;
+  const int labelCount = 2;
+  const int dataSetSize = 5;
 
-  for (int i = 0; i < 5; i++) {
-    int labelC = Label(0, i);
-    LabelTotal(labelC, 0) += 1;
+  Eigen::MatrixXi features(fnum, dataSetSize);
+  Eigen::MatrixXi label(1, dataSetSize);
+  features << 1, 1, 0, 0, 1,
+  0, 1, 0, 1, 0;
+  label << 1, 1, 0, 0, 1;
+  Eigen::MatrixXi labelTotal = Eigen::MatrixXi::Zero(labelCount, 1);
+  Eigen::MatrixXd labelPriorProbability(labelCount, 1);
+
+  for (int i = 0; i < dataSetSize; i++) {
+    int labelC = label(0, i);
+    labelTotal(labelC, 0) += 1;
   }
-  LabelP(0, 0) = (double)LabelTotal(0, 0) / 5.0;
-  LabelP(1, 0) = (double)LabelTotal(1, 0) / 5.0;
-  // std::cout << LabelTotal << ";" << std::endl;
-  std::vector<Eigen::MatrixXi> Lx = {
+
+  for (int i = 0; i < labelCount; i++) {
+    labelPriorProbability(i, 0) = (double)labelTotal(i, 0) / double(dataSetSize);
+  }
+  // std::cout << labelTotal << ";" << std::endl;
+  std::vector<Eigen::MatrixXi> labelList = {
     Eigen::MatrixXi::Zero(fnum, 2),
     Eigen::MatrixXi::Zero(fnum, 2)
   };
 
-  for (int i = 0; i < 5; i++) {
-    int labelC = Label(0, i);
+  /* 
+    labelC is the label
+    p is the feature index (currently 0 or 1)
+    features(p, i) is the feature value (currently 0 or 1)
+    Example content of labelList.at(0):
+    {0, 1  <--- 1st feature (1 means there is 1 occurence of the feature value 1)
+     2, 0} <--- 2nd feature (2 means there is 2 occurence of the feature value 0)
+    Example access:
+    labelList.at(1)(0, 1) means the number of occurence of feature value 1 at feature index 0 of label 1
+  */
+  for (int i = 0; i < dataSetSize; i++) {
+    int labelC = label(0, i);
     for (int p = 0; p < fnum; p++) {
-      Lx.at(labelC)(p, F(p, i)) += 1;
+      labelList.at(labelC)(p, features(p, i)) += 1;
     }
   }
-  // std::cout << Lx.at(0) << ";" << std::endl;
-  // std::cout << Lx.at(1) << ";" << std::endl;
-  std::vector<Eigen::MatrixXd> LPx = {
+  // std::cout << labelList.at(0) << ";" << std::endl;
+  // std::cout << labelList.at(1) << ";" << std::endl;
+  std::vector<Eigen::MatrixXd> likelihoodProbabilityList = {
     Eigen::MatrixXd::Zero(fnum, 2),
     Eigen::MatrixXd::Zero(fnum, 2)
   };
 
   for (int p = 0; p < labelCount; p++) {
     for (int i = 0; i < fnum; i++) {
-      for (int j = 0; j < 2; j++) {
-        LPx.at(p)(i, j) = double(Lx.at(p)(i, j) + 1) / (LabelTotal(p, 0) + 2);
+      for (int j = 0; j < likelihoodProbabilityList.at(p).cols(); j++) {
+        likelihoodProbabilityList.at(p)(i, j) = double(labelList.at(p)(i, j) + 1) / double(labelTotal(p, 0) + likelihoodProbabilityList.at(p).cols());
       }
     }
   }
-  // std::cout << LPx.at(0) << ";" << std::endl;
-  // std::cout << LPx.at(1) << ";" << std::endl;
+  // std::cout << likelihoodProbabilityList.at(0) << ";" << std::endl;
+  // std::cout << likelihoodProbabilityList.at(1) << ";" << std::endl;
   
   double highest = -1;
   int currentLabel = 0;
@@ -55,9 +69,9 @@ int main() {
   predict << 1, 1;
 
   for (int p = 0; p < labelCount; p++) {
-    double temp = LabelP(p, 0);
+    double temp = labelPriorProbability(p, 0);
     for (int i = 0; i < fnum; i++) {
-      temp *= LPx.at(p)(i, predict(i, 0));
+      temp *= likelihoodProbabilityList.at(p)(i, predict(i, 0));
     }
     std::cout << temp << std::endl;
     if (temp > highest) {
