@@ -15,6 +15,7 @@ class Dll{
   DllNode * head;
   int size_;
   bool destroyed;
+
   public:
   class DllError: public std::exception{
     virtual const char* what() const throw(){
@@ -43,6 +44,7 @@ class Dll{
       }
       return tmp;
     }
+
     public:
     Iterator(): ip(nullptr), is_begin(false),
     is_end(false){

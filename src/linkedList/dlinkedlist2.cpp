@@ -16,6 +16,7 @@ class Dll{
   DllNode * tail;
   size_t internal_size;
   bool destroyed;
+
   public:
   class DllError: public std::exception{
     virtual const char* what() const throw(){

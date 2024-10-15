@@ -33,7 +33,6 @@ struct Polynomial{
     }
     return Polynomial(d);
   }
-
 };
 
 double nm(Polynomial p, double x0){
@@ -69,5 +68,4 @@ int main(){
   std::cout << a.derivative().eval(2) << std::endl;
   std::cout << nm(a, 2) << std::endl;
   return 0;
-
 }

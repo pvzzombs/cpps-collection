@@ -17,6 +17,7 @@ class Polynomial{
   bool is_pow(char c){
     return c == '^';
   }
+
 public:
   Polynomial(){}
   Polynomial(std::string str){

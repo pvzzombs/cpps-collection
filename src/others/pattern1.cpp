@@ -45,8 +45,7 @@ void Gen(int num){
       begin--;
       end--;
     }
-  }
-  
+  }  
 }
 
 int main(int argc, char *argv[]) {

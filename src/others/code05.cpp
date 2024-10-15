@@ -23,8 +23,7 @@ int main()
         if(s[i] == '[')
             c++;
         if(s[i] == ']')
-            d++;
-        
+            d++;        
     }
     if(l_parentheses == r_parentheses && a == b && c == d)
         cout << "True" << endl;

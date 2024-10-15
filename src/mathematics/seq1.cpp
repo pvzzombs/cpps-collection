@@ -12,6 +12,7 @@ private:
   std::vector<Item> s;
   int last_num;
   int err;
+
 public:
   int get_error(){
     return err;
@@ -194,7 +195,6 @@ public:
     }
     return false;
   }
-
 };
 
 int main(int argc, char *argv[]) {

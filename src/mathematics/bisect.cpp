@@ -35,8 +35,7 @@ double Bisection(double a, double b){
     }*/
     c=(a+b)/2;
     i++;
-    std::cout << a << " " << b << " " << c << " " << f(a) << " " << f(b) << std::endl;
-    
+    std::cout << a << " " << b << " " << c << " " << f(a) << " " << f(b) << std::endl;    
   }
   if(i == Max){
     std::cerr << "Cannot be solved" << std::endl;

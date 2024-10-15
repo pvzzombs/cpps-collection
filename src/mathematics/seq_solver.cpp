@@ -112,8 +112,7 @@ void MultiStage(std::vector<int> &arr, int index, int depth, int N){
   }
 }
 
-void FindNth(){
-  
+void FindNth(){  
   // Multi Stage
   ms_stack.clear();
   //ms_stack.reserve(nth);
