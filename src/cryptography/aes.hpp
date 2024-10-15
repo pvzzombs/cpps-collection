@@ -88,7 +88,6 @@ class Aes {
 		}
 
     std::cout << std::endl;*/
-
 	}
 
   uint32_t subword(uint32_t in) {

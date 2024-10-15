@@ -11,7 +11,6 @@ void Solve(int x){
     Solve(x+1);
     std::swap(str[i], str[x]);
   }
-  
 }
 
 int main(int argc, char *argv[]) {

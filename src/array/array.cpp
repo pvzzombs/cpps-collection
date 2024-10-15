@@ -8,6 +8,7 @@ class Array{
   size_t alloc_size;
   size_t internal_size;
   bool destroyed;
+
 public:
   Array(): arr(nullptr), alloc_size(0), internal_size(0), destroyed(false){}
   Array(std::initializer_list<Z> args){

@@ -88,7 +88,6 @@ void Solve(){
       pars.pop_back();
     }
   }
-
 }
 
 int main(){

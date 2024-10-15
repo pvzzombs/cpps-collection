@@ -11,6 +11,7 @@
 
 class Graph {
   std::unordered_map<std::string, std::vector<std::pair<std::string, long>>> representation;
+
 public:
   bool addVertex(const std::string &VertexName) {
     if(representation.count(VertexName) > 0){

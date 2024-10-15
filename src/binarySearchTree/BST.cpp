@@ -99,6 +99,7 @@ class BST{
     }
     return node;
   }
+
   public:
   BST(): root(nullptr), destroyed(false){
   }
