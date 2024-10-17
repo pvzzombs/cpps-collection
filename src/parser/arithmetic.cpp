@@ -107,7 +107,6 @@ ASTNode * factor(){
     return temp;
   }else if(peek() == '+' || peek() == '-'){
     //std::cout << "Test" << std::endl;
-    ASTNode * temp = new ASTNode;
     int sign = 1;
     while(peek() == '+' || peek() == '-'){
       if(peek() == '-'){
@@ -116,6 +115,7 @@ ASTNode * factor(){
       eat();
     }
     if (sign == -1) {
+      ASTNode * temp = new ASTNode;
       temp->type = SIGN;
       temp->value = "-";
       temp->left = factor();
