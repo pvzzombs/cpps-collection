@@ -11,3 +11,4 @@ endfunction()
 
 add_cpp_file(bubble_sort bubble_sort.cpp)
 add_cpp_file(mergeSort mergeSort.cpp)
+add_cpp_file(sorting sorting.cpp)
